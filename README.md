@@ -1,7 +1,7 @@
 enb-stylus [![Build Status](https://travis-ci.org/enb-make/enb-stylus.png?branch=master)](https://travis-ci.org/enb-make/enb-stylus) [![NPM version](https://badge.fury.io/js/enb-stylus.png)](http://badge.fury.io/js/enb-stylus)
 ===========
 
-Поддержка Stylus для ENB. Пакет содержит:
+Поддержка Stylus для ENB. Пакет содержит технологии:
  * `enb-stylus/techs/css-stylus`
  * `enb-stylus/techs/css-stylus-with-nib`
  * `enb-stylus/techs/css-stylus-with-autoprefixer`
