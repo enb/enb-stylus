@@ -28,7 +28,7 @@ css-stylus
 **Пример**
 
 ```javascript
-nodeConfig.addTech(require('enb/techs/css-stylus'));
+nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
 ```
 
 css-stylus-with-nib
@@ -47,7 +47,7 @@ css-stylus-with-nib
 **Пример**
 
 ```javascript
-nodeConfig.addTech(require('enb/techs/css-stylus-with-nib'));
+nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-nib'));
 ```
 
 css-stylus-with-autoprefixer
@@ -67,5 +67,5 @@ css-stylus-with-autoprefixer
 **Пример**
 
 ```javascript
-nodeConfig.addTech(require('enb/techs/css-stylus-with-autoprefixer'), {autoprefixerArguments: ['ie 7', 'ie 8']});
+nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-autoprefixer'), {autoprefixerArguments: ['ie 7', 'ie 8']});
 ```

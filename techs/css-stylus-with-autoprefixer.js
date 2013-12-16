@@ -16,7 +16,7 @@
  * **Пример**
  *
  * ```javascript
- * nodeConfig.addTech(require('enb/techs/css-stylus-with-autoprefixer'), {autoprefixerArguments: ['ie 7', 'ie 8']});
+ * nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-autoprefixer'), {autoprefixerArguments: ['ie 7', 'ie 8']});
  * ```
  */
 

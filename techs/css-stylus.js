@@ -14,7 +14,7 @@
  * **Пример**
  *
  * ```javascript
- * nodeConfig.addTech(require('enb/techs/css-stylus'));
+ * nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
  * ```
  */
 var Vow = require('vow');

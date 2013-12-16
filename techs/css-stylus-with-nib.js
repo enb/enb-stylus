@@ -15,7 +15,7 @@
  * **Пример**
  *
  * ```javascript
- * nodeConfig.addTech(require('enb/techs/css-stylus-with-nib'));
+ * nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-nib'));
  * ```
  */
 
