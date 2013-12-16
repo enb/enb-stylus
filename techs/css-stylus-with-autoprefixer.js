@@ -26,7 +26,7 @@
 var autoprefixerStylus = require('autoprefixer-stylus');
 
 module.exports = require('./css-stylus').buildFlow()
-    .name('css-stylus-with-nib')
+    .name('css-stylus-with-autoprefixer')
     .defineOption('autoprefixerArguments')
     .methods({
         _configureRenderer: function (renderer) {
