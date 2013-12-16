@@ -2,9 +2,10 @@
     "name": "enb-stylus",
     "version": "0.0.1",
     "description": "enb stylus techs",
-    "main": "index.js",
     "dependencies": {
-        "vow": "~0.3.12"
+        "vow": "~0.3.12",
+        "stylus": "0.40.x",
+        "autoprefixer-stylus": "0.0.3"
     },
     "devDependencies": {
         "enb": "~0.8.43",
