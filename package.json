@@ -1,0 +1,27 @@
+{
+    "name": "enb-stylus",
+    "version": "0.0.1",
+    "description": "enb stylus techs",
+    "main": "index.js",
+    "dependencies": {
+        "vow": "~0.3.12"
+    },
+    "devDependencies": {
+        "enb": "~0.8.43",
+        "jscs": "~1.0.15",
+        "jshint": "~2.3.0"
+    },
+    "scripts": {
+        "test": "make lint"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/enb-make/enb-stylus.git"
+    },
+    "author": "Marat Dulin",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/enb-make/enb-stylus/issues"
+    },
+    "homepage": "https://github.com/enb-make/enb-stylus"
+}

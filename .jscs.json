@@ -1,0 +1,76 @@
+{
+    "requireCurlyBraces": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do"
+    ],
+    "requireSpaceAfterKeywords": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "switch",
+        "return",
+        "function",
+        "catch"
+    ],
+    "disallowMultipleVarDecl": true,
+    "disallowLeftStickedOperators": [
+        "?",
+        "+",
+        "/",
+        "*",
+        "=",
+        "==",
+        "===",
+        "!=",
+        "!==",
+        ">",
+        ">=",
+        "<",
+        "<="
+    ],
+    "disallowRightStickedOperators": [
+        "?",
+        "+",
+        "/",
+        "*",
+        ":",
+        "=",
+        "==",
+        "===",
+        "!=",
+        "!==",
+        ">",
+        ">=",
+        "<",
+        "<="
+    ],
+    "requireRightStickedOperators": ["!"],
+    "requireLeftStickedOperators": [","],
+    "disallowImplicitTypeConversion": [
+        "numeric",
+        "boolean",
+        "binary",
+        "string"
+    ],
+    "disallowKeywords": ["with"],
+    "disallowMultipleLineBreaks": true,
+    "disallowKeywordsOnNewLine": ["else", "catch"],
+    "requireLineFeedAtFileEnd": true,
+    "validateJSDoc": {
+        "checkParamNames": true,
+        "requireParamTypes": true
+    },
+    "disallowSpacesInsideObjectBrackets": true,
+    "disallowSpacesInsideArrayBrackets": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "excludeFiles": [
+        "node_modules/**",
+        ".idea/**",
+        ".git/**"
+    ]
+}
