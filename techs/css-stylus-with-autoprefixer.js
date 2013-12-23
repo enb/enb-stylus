@@ -23,14 +23,21 @@
  * ```
  */
 
-var autoprefixerStylus = require('autoprefixer-stylus');
+var autoprefixer = require('autoprefixer');
 
 module.exports = require('./css-stylus').buildFlow()
     .name('css-stylus-with-autoprefixer')
     .defineOption('autoprefixerArguments')
     .methods({
         _configureRenderer: function (renderer) {
-            renderer.use(autoprefixerStylus.apply(global, this._autoprefixerArguments || []));
+            var args = this._autoprefixerArguments;
+            renderer.use(function (style) {
+                this.on('end', function (err, css) {
+                    return args ?
+                        autoprefixer.apply(this, args).process(css).css :
+                        autoprefixer.process(css).css;
+                });
+            });
             return renderer;
         }
     })

@@ -1,11 +1,11 @@
 {
     "name": "enb-stylus",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "enb stylus techs",
     "dependencies": {
         "vow": "~0.3.12",
         "stylus": "0.40.x",
-        "autoprefixer-stylus": "0.0.3"
+        "autoprefixer": "1.0.x"
     },
     "devDependencies": {
         "enb": "~0.8.43",
