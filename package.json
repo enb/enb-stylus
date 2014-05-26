@@ -1,28 +1,28 @@
 {
-    "name": "enb-stylus",
-    "version": "0.0.3",
-    "description": "enb stylus techs",
-    "dependencies": {
-        "vow": "~0.3.12",
-        "stylus": "0.40.x",
-        "autoprefixer": "1.0.x"
-    },
-    "devDependencies": {
-        "enb": "~0.8.43",
-        "jscs": "~1.0.15",
-        "jshint": "~2.3.0"
-    },
-    "scripts": {
-        "test": "make lint"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/enb-make/enb-stylus.git"
-    },
-    "author": "Marat Dulin",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/enb-make/enb-stylus/issues"
-    },
-    "homepage": "https://github.com/enb-make/enb-stylus"
+  "name": "enb-stylus",
+  "version": "1.0.0",
+  "description": "enb stylus techs",
+  "dependencies": {
+    "vow": "~0.3.12",
+    "stylus": "0.40.x",
+    "autoprefixer": "1.0.x"
+  },
+  "devDependencies": {
+    "enb": "~0.8.43",
+    "jscs": "~1.0.15",
+    "jshint": "~2.3.0"
+  },
+  "scripts": {
+    "test": "make lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/enb-make/enb-stylus.git"
+  },
+  "author": "Marat Dulin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/enb-make/enb-stylus/issues"
+  },
+  "homepage": "https://github.com/enb-make/enb-stylus"
 }
