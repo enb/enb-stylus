@@ -60,7 +60,7 @@ css-stylus-with-autoprefixer
 
 * *String* **target** — Результирующий таргет. По умолчанию `?.css`.
 * *Object* **variables** — Дополнительные переменные окружения для `stylus`.
-* *Array* **autoprefixerArguments** — Аргументы для автопрефиксера.
+* *Array* **browsers** — Браузеры (опция автопрефиксера).
 * *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
   (его предоставляет технология `files`). По умолчанию — `?.files`.
 
