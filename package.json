@@ -4,7 +4,7 @@
   "description": "enb stylus techs",
   "dependencies": {
     "vow": "~0.3.12",
-    "stylus": "0.40.x",
+    "stylus": "0.46.x",
     "autoprefixer": "1.0.x"
   },
   "devDependencies": {
