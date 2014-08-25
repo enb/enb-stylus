@@ -20,14 +20,16 @@
 var Vow = require('vow');
 var stylus = require('stylus');
 
-module.exports = require('enb/techs/css').buildFlow()
+module.exports = require('enb/lib/build-flow').create()
     .name('css-stylus')
+    .target('target', '?.css')
     .defineOption('compress', false)
     .defineOption('prefix', '')
     .defineOption('variables')
     .useFileList(['css', 'styl'])
     .builder(function (sourceFiles) {
         var _this = this;
+        var filename = this.node.resolvePath(this._target);
         var promise = Vow.promise();
 
         var css = sourceFiles.map(function (file) {
@@ -41,14 +43,13 @@ module.exports = require('enb/techs/css').buildFlow()
             }
         }).join('\n');
 
-        var targetName = _this._target;
         var renderer = stylus(css, {
-            compress: this._compress,
-            prefix: this._prefix
-        })
-            .define('url', function (url) {
-                return new stylus.nodes.Literal('url(' + _this._resolveCssUrl(url.val, url.filename) + ')');
-            });
+                compress: this._compress,
+                prefix: this._prefix
+            })
+            .set('filename', filename)
+            .define('url', stylus.resolver());
+
         if (this._variables) {
             var variables = this._variables;
             Object.keys(variables).forEach(function (key) {
@@ -65,14 +66,9 @@ module.exports = require('enb/techs/css').buildFlow()
                 }
             });
 
-        return promise.then(function (css) {
-            return _this._processIncludes(css, _this.node.resolvePath(targetName));
-        });
+        return promise;
     })
     .methods({
-        _resolveCssUrl: function (data, filename) {
-            return this._getCssPreprocessor()._resolveCssUrl(data, filename);
-        },
         _configureRenderer: function (renderer) {
             return renderer;
         }
