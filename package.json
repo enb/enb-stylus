@@ -1,6 +1,6 @@
 {
   "name": "enb-stylus",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "enb stylus techs",
   "dependencies": {
     "vow": "~0.3.12",
