@@ -17,7 +17,7 @@
  * nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
  * ```
  */
-var Vow = require('vow');
+var vow = require('vow');
 var stylus = require('stylus');
 
 module.exports = require('enb/techs/css').buildFlow()
@@ -30,7 +30,7 @@ module.exports = require('enb/techs/css').buildFlow()
     .builder(function (sourceFiles) {
         var _this = this;
         var filename = this.node.resolvePath(this._target);
-        var promise = Vow.promise();
+        var defer = vow.defer();
 
         var css = sourceFiles.map(function (file) {
             var path = file.fullname;
@@ -61,15 +61,16 @@ module.exports = require('enb/techs/css').buildFlow()
         this._configureRenderer(renderer)
             .render(function (err, css) {
                 if (err) {
-                    promise.reject(err);
+                    defer.reject(err);
                 } else {
-                    promise.fulfill(css);
+                    defer.resolve(css);
                 }
             });
 
-        return promise.then(function (css) {
-            return _this._processIncludes(css, _this.node.resolvePath(_this.targetName));
-        });
+        return defer.promise()
+            .then(function (css) {
+                return _this._processIncludes(css, _this.node.resolvePath(_this.targetName));
+            });
     })
     .methods({
         _configureRenderer: function (renderer) {
