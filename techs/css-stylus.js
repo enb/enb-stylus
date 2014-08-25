@@ -22,6 +22,8 @@ var stylus = require('stylus');
 
 module.exports = require('enb/techs/css').buildFlow()
     .name('css-stylus')
+    .defineOption('compress', false)
+    .defineOption('prefix', '')
     .defineOption('variables')
     .useFileList(['css', 'styl'])
     .builder(function (sourceFiles) {
@@ -40,7 +42,10 @@ module.exports = require('enb/techs/css').buildFlow()
         }).join('\n');
 
         var targetName = _this._target;
-        var renderer = stylus(css)
+        var renderer = stylus(css, {
+            compress: this._compress,
+            prefix: this._prefix
+        })
             .define('url', function (url) {
                 return new stylus.nodes.Literal('url(' + _this._resolveCssUrl(url.val, url.filename) + ')');
             });
