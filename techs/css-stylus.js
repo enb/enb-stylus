@@ -47,6 +47,7 @@ module.exports = require('enb/lib/build-flow').create()
                 compress: this._compress,
                 prefix: this._prefix
             })
+            .set('include css', true)
             .set('filename', filename)
             .define('url', stylus.resolver());
 
