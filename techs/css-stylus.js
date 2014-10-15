@@ -20,7 +20,7 @@
 var Vow = require('vow');
 var stylus = require('stylus');
 
-module.exports = require('enb/lib/build-flow').create()
+module.exports = require('enb/techs/css').buildFlow()
     .name('css-stylus')
     .target('target', '?.css')
     .defineOption('compress', false)
@@ -47,7 +47,6 @@ module.exports = require('enb/lib/build-flow').create()
                 compress: this._compress,
                 prefix: this._prefix
             })
-            .set('include css', true)
             .set('resolve url', true)
             .set('filename', filename)
             .define('url', stylus.resolver());
@@ -59,7 +58,7 @@ module.exports = require('enb/lib/build-flow').create()
             });
         }
 
-        _this._configureRenderer(renderer)
+        this._configureRenderer(renderer)
             .render(function (err, css) {
                 if (err) {
                     promise.reject(err);
@@ -68,7 +67,9 @@ module.exports = require('enb/lib/build-flow').create()
                 }
             });
 
-        return promise;
+        return promise.then(function (css) {
+            return _this._processIncludes(css, _this.node.resolvePath(_this.targetName));
+        });
     })
     .methods({
         _configureRenderer: function (renderer) {
