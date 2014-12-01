@@ -33,7 +33,7 @@ module.exports = require('enb/techs/css').buildFlow()
         var defer = vow.defer();
 
         var css = sourceFiles.map(function (file) {
-            var path = file.fullname;
+            var path = _this.node.relativePath(file.fullname);
             if (file.name.indexOf('.styl') !== -1) {
                 return '/* ' + path + ':begin */\n' +
                     '@import "' + path + '";\n' +
