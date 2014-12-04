@@ -5,7 +5,7 @@
   "dependencies": {
     "vow": "0.4.7",
     "stylus": "0.47.1",
-    "autoprefixer": "1.0.x"
+    "autoprefixer": "~3.1.0"
   },
   "devDependencies": {
     "enb": "~0.8.43",
