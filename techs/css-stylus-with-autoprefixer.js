@@ -35,7 +35,7 @@ module.exports = require('./css-stylus').buildFlow()
             renderer.use(function (style) {
                 this.on('end', function (err, css) {
                     return args ?
-                        autoprefixer.apply(this, {browsers: args}).process(css).css :
+                        autoprefixer.apply(this, [{browsers: args}]).process(css).css :
                         autoprefixer.process(css).css;
                 });
             });
