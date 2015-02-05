@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "description": "enb stylus techs",
   "dependencies": {
-    "vow": "0.4.7",
+    "vow": "0.4.8",
     "stylus": "0.47.1",
     "autoprefixer": "~3.1.0"
   },
