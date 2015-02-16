@@ -29,17 +29,11 @@ module.exports = require('./css-stylus').buildFlow()
     .name('css-stylus-with-autoprefixer')
     .defineOption('browsers')
     .defineOption('autoprefixerArguments')
-    .methods({
-        _configureRenderer: function (renderer) {
-            var args = this._browsers || this._autoprefixerArguments;
-            renderer.use(function (style) {
-                this.on('end', function (err, css) {
-                    return args ?
-                        autoprefixer.apply(this, [{browsers: args}]).process(css).css :
-                        autoprefixer.process(css).css;
-                });
-            });
-            return renderer;
-        }
+    .wrapper(function (css) {
+        var browsers = this._browsers || this._autoprefixerArguments;
+
+        return browsers ?
+            autoprefixer.apply(this, [{browsers: browsers}]).process(css).css :
+            autoprefixer.process(css).css;
     })
     .createTech();
