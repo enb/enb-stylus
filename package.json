@@ -2,6 +2,43 @@
   "name": "enb-stylus",
   "version": "1.2.2",
   "description": "enb stylus techs",
+  "keywords": [
+    "enb",
+    "stylus",
+    "styl",
+    "css",
+    "autoprefixer",
+    "nib"
+  ],
+  "author": "Marat Dulin <mdevils@yandex.ru>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/enb-make/enb-stylus/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:enb-make/enb-stylus.git"
+  },
+  "homepage": "https://github.com/enb-make/enb-stylus",
+  "bugs": "https://github.com/enb-make/enb-stylus/issues",
+  "maintainers": [
+    {
+      "name": "Andrew Abramov",
+      "email": "andrewblond@yandex.com",
+      "github-username": "andrewblond"
+    },
+    {
+      "name": "Marat Dulin",
+      "email": "mdevils@yandex.ru",
+      "github-username": "mdevils"
+    }
+  ],
+  "contributors": [
+    "Andrew Abramov <andrewblond@yandex.com>",
+    "Marat Dulin <mdevils@yandex.ru>"
+  ],
   "peerDependencies": {
     "enb": ">=0.8.43 <1.0.0"
   },
@@ -17,15 +54,5 @@
   },
   "scripts": {
     "test": "make lint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/enb-make/enb-stylus.git"
-  },
-  "author": "Marat Dulin",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/enb-make/enb-stylus/issues"
-  },
-  "homepage": "https://github.com/enb-make/enb-stylus"
+  }
 }
