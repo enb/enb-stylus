@@ -2,13 +2,16 @@
   "name": "enb-stylus",
   "version": "1.2.2",
   "description": "enb stylus techs",
+  "peerDependencies": {
+    "enb": ">=0.8.43 <1.0.0"
+  },
   "dependencies": {
     "vow": "0.4.8",
     "stylus": "0.50.0",
     "autoprefixer-core": "~5.1.0"
   },
   "devDependencies": {
-    "enb": "~0.8.43",
+    "enb": ">=0.8.43 <1.0.0",
     "jscs": "~1.0.15",
     "jshint": "~2.3.0"
   },
