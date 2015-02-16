@@ -23,7 +23,7 @@
  * ```
  */
 
-var autoprefixer = require('autoprefixer');
+var autoprefixer = require('autoprefixer-core');
 
 module.exports = require('./css-stylus').buildFlow()
     .name('css-stylus-with-autoprefixer')
