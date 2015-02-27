@@ -24,6 +24,7 @@ module.exports = require('./css-stylus').buildFlow()
     .methods({
         _configureRenderer: function (renderer) {
             var nib;
+
             try {
                 nib = require('nib');
             } catch (e) {

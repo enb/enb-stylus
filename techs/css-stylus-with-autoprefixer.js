@@ -33,7 +33,7 @@ module.exports = require('./css-stylus').buildFlow()
         var browsers = this._browsers || this._autoprefixerArguments;
 
         return browsers ?
-            autoprefixer.apply(this, [{browsers: browsers}]).process(css).css :
+            autoprefixer.apply(this, [{ browsers: browsers }]).process(css).css :
             autoprefixer.process(css).css;
     })
     .createTech();
