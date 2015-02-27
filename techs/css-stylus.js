@@ -17,10 +17,10 @@
  * nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
  * ```
  */
-var vow = require('vow');
-var postcss = require('postcss');
-var atImport = require('postcss-import');
-var stylus = require('stylus');
+var vow = require('vow'),
+    postcss = require('postcss'),
+    atImport = require('postcss-import'),
+    stylus = require('stylus');
 
 module.exports = require('enb/lib/build-flow').create()
     .name('css-stylus')
@@ -30,11 +30,12 @@ module.exports = require('enb/lib/build-flow').create()
     .defineOption('variables')
     .useFileList(['css', 'styl'])
     .builder(function (sourceFiles) {
-        var node = this.node;
-        var filename = node.resolvePath(this._target);
-        var defer = vow.defer();
+        var node = this.node,
+            filename = node.resolvePath(this._target),
+            defer = vow.defer(),
+            css, renderer;
 
-        var css = sourceFiles.map(function (file) {
+        css = sourceFiles.map(function (file) {
             var url = node.relativePath(file.fullname);
 
             if (file.name.indexOf('.styl') !== -1) {
@@ -46,7 +47,7 @@ module.exports = require('enb/lib/build-flow').create()
             }
         }).join('\n');
 
-        var renderer = stylus(css, {
+        renderer = stylus(css, {
                 compress: this._compress,
                 prefix: this._prefix
             })
@@ -56,6 +57,7 @@ module.exports = require('enb/lib/build-flow').create()
 
         if (this._variables) {
             var variables = this._variables;
+
             Object.keys(variables).forEach(function (key) {
                 renderer.define(key, variables[key]);
             });
@@ -75,10 +77,10 @@ module.exports = require('enb/lib/build-flow').create()
                 return postcss()
                     .use(atImport({
                         transform: function (content, filename) {
-                            var url = node.relativePath(filename);
-                            var pre = '/* ' + url + ': begin */ /**/\n';
-                            var post = '/* ' + url + ': end */ /**/\n';
-                            var res = pre + content + post;
+                            var url = node.relativePath(filename),
+                                pre = '/* ' + url + ': begin */ /**/\n',
+                                post = '/* ' + url + ': end */ /**/\n',
+                                res = pre + content + post;
 
                             return res.replace(/\n/g, '\n    ');
                         }

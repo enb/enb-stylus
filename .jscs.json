@@ -1,10 +1,7 @@
 {
-    "requireCurlyBraces": [
-        "if",
-        "else",
-        "for",
-        "while",
-        "do"
+    "excludeFiles": [
+        "node_modules/**",
+        "coverage/**"
     ],
     "requireSpaceAfterKeywords": [
         "if",
@@ -14,63 +11,53 @@
         "do",
         "switch",
         "return",
-        "function",
+        "try",
         "catch"
     ],
-    "disallowMultipleVarDecl": true,
-    "disallowLeftStickedOperators": [
-        "?",
-        "+",
-        "/",
-        "*",
-        "=",
-        "==",
-        "===",
-        "!=",
-        "!==",
-        ">",
-        ">=",
-        "<",
-        "<="
-    ],
-    "disallowRightStickedOperators": [
-        "?",
-        "+",
-        "/",
-        "*",
-        ":",
-        "=",
-        "==",
-        "===",
-        "!=",
-        "!==",
-        ">",
-        ">=",
-        "<",
-        "<="
-    ],
-    "requireRightStickedOperators": ["!"],
-    "requireLeftStickedOperators": [","],
-    "disallowImplicitTypeConversion": [
-        "numeric",
-        "boolean",
-        "binary",
-        "string"
-    ],
-    "disallowKeywords": ["with"],
-    "disallowMultipleLineBreaks": true,
-    "disallowKeywordsOnNewLine": ["else", "catch"],
-    "requireLineFeedAtFileEnd": true,
-    "validateJSDoc": {
-        "checkParamNames": true,
-        "requireParamTypes": true
+    "requireSpaceBeforeBlockStatements": true,
+    "requireSpacesInConditionalExpression": true,
+    "requireSpacesInFunction": {
+        "beforeOpeningCurlyBrace": true
     },
-    "disallowSpacesInsideObjectBrackets": true,
-    "disallowSpacesInsideArrayBrackets": true,
+    "requireSpacesInAnonymousFunctionExpression": {
+        "beforeOpeningRoundBrace": true
+    },
+    "disallowSpacesInNamedFunctionExpression": {
+        "beforeOpeningRoundBrace": true
+    },
+    "requireMultipleVarDecl": true,
+    "requireBlocksOnNewline": 1,
+    "disallowPaddingNewlinesInBlocks": true,
+    "disallowSpacesInsideArrayBrackets": "nested",
+    "requireSpacesInsideObjectBrackets": "all",
+    "disallowQuotedKeysInObjects": "allButReserved",
     "disallowSpaceAfterObjectKeys": true,
-    "excludeFiles": [
-        "node_modules/**",
-        ".idea/**",
-        ".git/**"
-    ]
+    "requireCommaBeforeLineBreak": true,
+    "requireOperatorBeforeLineBreak": true,
+    "disallowSpaceAfterPrefixUnaryOperators": true,
+    "disallowSpaceBeforePostfixUnaryOperators": true,
+    "requireSpaceBeforeBinaryOperators": true,
+    "requireSpaceAfterBinaryOperators": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": true,
+    "disallowKeywords": ["with"],
+    "disallowMultipleLineStrings": true,
+    "disallowMultipleLineBreaks": true,
+    "validateLineBreaks": "LF",
+    "validateQuoteMarks": {
+        "mark": "'",
+        "escape": true
+    },
+    "disallowMixedSpacesAndTabs": true,
+    "disallowTrailingWhitespace": true,
+    "disallowKeywordsOnNewLine": [
+        "else",
+        "catch"
+    ],
+    "requireLineFeedAtFileEnd": true,
+    "maximumLineLength": 120,
+    "requireCapitalizedConstructors": true,
+    "safeContextKeyword": ["_this"],
+    "disallowYodaConditions": true,
+    "requireSpaceAfterLineComment": true,
+    "disallowNewlineBeforeBlockStatements": true
 }
