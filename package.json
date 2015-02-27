@@ -43,9 +43,11 @@
     "enb": ">=0.8.43 <1.0.0"
   },
   "dependencies": {
-    "vow": "0.4.8",
+    "autoprefixer-core": "5.1.0",
+    "postcss": "4.0.6",
+    "postcss-import": "5.0.3",
     "stylus": "0.50.0",
-    "autoprefixer-core": "~5.1.0"
+    "vow": "0.4.8"
   },
   "devDependencies": {
     "enb": ">=0.8.43 <1.0.0",

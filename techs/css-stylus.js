@@ -18,9 +18,11 @@
  * ```
  */
 var vow = require('vow');
+var postcss = require('postcss');
+var atImport = require('postcss-import');
 var stylus = require('stylus');
 
-module.exports = require('enb/techs/css').buildFlow()
+module.exports = require('enb/lib/build-flow').create()
     .name('css-stylus')
     .target('target', '?.css')
     .defineOption('compress', false)
@@ -28,18 +30,19 @@ module.exports = require('enb/techs/css').buildFlow()
     .defineOption('variables')
     .useFileList(['css', 'styl'])
     .builder(function (sourceFiles) {
-        var _this = this;
-        var filename = this.node.resolvePath(this._target);
+        var node = this.node;
+        var filename = node.resolvePath(this._target);
         var defer = vow.defer();
 
         var css = sourceFiles.map(function (file) {
-            var path = _this.node.relativePath(file.fullname);
+            var url = node.relativePath(file.fullname);
+
             if (file.name.indexOf('.styl') !== -1) {
-                return '/* ' + path + ':begin */\n' +
-                    '@import "' + path + '";\n' +
-                    '/* ' + path + ':end */\n';
+                return '/* ' + url + ':begin */\n' +
+                    '@import "' + url + '";\n' +
+                    '/* ' + url + ':end */\n';
             } else {
-                return '@import "' + path + '";';
+                return '@import "' + url + '";';
             }
         }).join('\n');
 
@@ -69,7 +72,21 @@ module.exports = require('enb/techs/css').buildFlow()
 
         return defer.promise()
             .then(function (css) {
-                return _this._processIncludes(css, _this.node.resolvePath(_this.targetName));
+                return postcss()
+                    .use(atImport({
+                        transform: function (content, filename) {
+                            var url = node.relativePath(filename);
+                            var pre = '/* ' + url + ': begin */ /**/\n';
+                            var post = '/* ' + url + ': end */ /**/\n';
+                            var res = pre + content + post;
+
+                            return res.replace(/\n/g, '\n    ');
+                        }
+                    }))
+                    .process(css, {
+                        from: filename
+                    })
+                    .css;
             });
     })
     .methods({
