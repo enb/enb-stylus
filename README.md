@@ -1,5 +1,7 @@
-enb-stylus [![Build Status](https://travis-ci.org/enb-make/enb-stylus.png?branch=master)](https://travis-ci.org/enb-make/enb-stylus) [![NPM version](https://badge.fury.io/js/enb-stylus.png)](http://badge.fury.io/js/enb-stylus)
-===========
+enb-stylus
+==========
+
+[![NPM version](http://img.shields.io/npm/v/enb-stylus.svg?style=flat)](http://www.npmjs.org/package/enb-stylus) [![Build Status](http://img.shields.io/travis/enb-make/enb-stylus/master.svg?style=flat&label=tests)](https://travis-ci.org/enb-make/enb-stylus) [![Dependency Status](http://img.shields.io/david/enb-make/enb-stylus.svg?style=flat)](https://david-dm.org/enb-make/enb-stylus)
 
 Поддержка Stylus для ENB. Пакет содержит технологии:
  * `enb-stylus/techs/css-stylus`
