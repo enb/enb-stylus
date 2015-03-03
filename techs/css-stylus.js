@@ -17,7 +17,8 @@
  * nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
  * ```
  */
-var vow = require('vow'),
+var path = require('path'),
+    vow = require('vow'),
     postcss = require('postcss'),
     atImport = require('postcss-import'),
     stylus = require('stylus');
@@ -31,7 +32,7 @@ module.exports = require('enb/lib/build-flow').create()
     .useFileList(['css', 'styl'])
     .builder(function (sourceFiles) {
         var node = this.node,
-            filename = node.resolvePath(this._target),
+            filename = node.resolvePath(path.basename(this._target)),
             defer = vow.defer(),
             css, renderer;
 
