@@ -29,24 +29,36 @@ module.exports = require('enb/lib/build-flow').create()
     .defineOption('compress', false)
     .defineOption('prefix', '')
     .defineOption('variables')
-    .useFileList(['css', 'styl'])
+    .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
         var node = this.node,
             filename = node.resolvePath(path.basename(this._target)),
             defer = vow.defer(),
+            added = {},
             css, renderer;
 
-        css = sourceFiles.map(function (file) {
-            var url = node.relativePath(file.fullname);
+        css = sourceFiles
+            .filter(function (file) {
+                var basename = file.fullname.slice(0, -(file.suffix.length + 1));
+                if (added[basename]) {
+                    return false;
+                }
 
-            if (file.name.indexOf('.styl') !== -1) {
-                return '/* ' + url + ':begin */\n' +
-                    '@import "' + url + '";\n' +
-                    '/* ' + url + ':end */\n';
-            } else {
-                return '@import "' + url + '";';
-            }
-        }).join('\n');
+                added[basename] = true;
+                return true;
+            })
+            .map(function (file) {
+                var url = node.relativePath(file.fullname);
+
+                if (file.suffix === 'styl') {
+                    return '/* ' + url + ':begin */\n' +
+                        '@import "' + url + '";\n' +
+                        '/* ' + url + ':end */\n';
+                } else {
+                    // postcss adds surrounding comments itself so don't add them here
+                    return '@import "' + url + '";';
+                }
+            }).join('\n');
 
         renderer = stylus(css, {
                 compress: this._compress,
