@@ -21,6 +21,7 @@ var path = require('path'),
     vow = require('vow'),
     postcss = require('postcss'),
     atImport = require('postcss-import'),
+    url = require('postcss-url'),
     stylus = require('stylus');
 
 module.exports = require('enb/lib/build-flow').create()
@@ -97,6 +98,9 @@ module.exports = require('enb/lib/build-flow').create()
 
                             return res.replace(/\n/g, '\n    ');
                         }
+                    }))
+                    .use(url({
+                        url: 'rebase'
                     }))
                     .process(css, {
                         from: filename

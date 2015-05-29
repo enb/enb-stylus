@@ -46,6 +46,7 @@
     "autoprefixer-core": "5.2.0",
     "postcss": "4.1.11",
     "postcss-import": "5.2.2",
+    "postcss-url": "3.2.0",
     "stylus": "0.51.1",
     "vow": "0.4.9"
   },
