@@ -10,6 +10,8 @@
  * * *Object* **variables** — Дополнительные переменные окружения для `stylus`.
  * * *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
  *   (его предоставляет технология `files`). По умолчанию — `?.files`.
+ * * *Boolean|Object* **autoprefixer** - Использовать `autoprefixer` при сборке `css`. По умолчанию `false`.
+ * * *Array* **autoprefixer.browsers** - Браузеры (опция автопрефиксера).
  *
  * **Пример**
  *
@@ -22,7 +24,8 @@ var path = require('path'),
     postcss = require('postcss'),
     atImport = require('postcss-import'),
     url = require('postcss-url'),
-    stylus = require('stylus');
+    stylus = require('stylus'),
+    autoprefixer = require('autoprefixer-core');
 
 module.exports = require('enb/lib/build-flow').create()
     .name('css-stylus')
@@ -30,6 +33,7 @@ module.exports = require('enb/lib/build-flow').create()
     .defineOption('compress', false)
     .defineOption('prefix', '')
     .defineOption('variables')
+    .defineOption('autoprefixer', false)
     .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
         var node = this.node,
@@ -86,22 +90,32 @@ module.exports = require('enb/lib/build-flow').create()
                 }
             });
 
-        return defer.promise()
-            .then(function (css) {
-                return postcss()
-                    .use(atImport({
-                        transform: function (content, filename) {
-                            var url = node.relativePath(filename),
-                                pre = '/* ' + url + ': begin */ /**/\n',
-                                post = '/* ' + url + ': end */ /**/\n',
-                                res = pre + content + post;
+        var processor = postcss()
+            .use(atImport({
+                transform: function (content, filename) {
+                    var url = node.relativePath(filename),
+                        pre = '/* ' + url + ': begin */ /**/\n',
+                        post = '/* ' + url + ': end */ /**/\n',
+                        res = pre + content + post;
 
-                            return res.replace(/\n/g, '\n    ');
-                        }
-                    }))
-                    .use(url({
-                        url: 'rebase'
-                    }))
+                    return res.replace(/\n/g, '\n    ');
+                }
+            }))
+            .use(url({
+                url: 'rebase'
+            }));
+
+        if (this._autoprefixer) {
+            processor.use(
+                (this._autoprefixer.browsers ?
+                    autoprefixer({ browsers: this._autoprefixer.browsers }) :
+                    autoprefixer)
+            );
+        }
+
+        return defer.promise()
+            .then(function () {
+                return processor
                     .process(css, {
                         from: filename
                     })
