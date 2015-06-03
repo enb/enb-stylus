@@ -137,8 +137,8 @@ module.exports = require('enb/lib/build-flow').create()
 
             if (this._sourcemap) {
                 opts.map = {
-                    prev: sourcemap,
-                    inline: this._sourcemap.inline
+                    prev: JSON.stringify(sourcemap),
+                    inline: !!this._sourcemap.inline
                 };
             }
 
