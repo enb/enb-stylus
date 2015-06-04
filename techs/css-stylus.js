@@ -62,7 +62,7 @@ module.exports = require('enb/lib/build-flow').create()
 
             return sourceFiles
                 .filter(function (file) {
-                    var basename = file.fullname.slice(0, -(file.suffix.length + 1));
+                    var basename = file.fullname.substring(0, file.fullname.lastIndexOf('.'));
                     if (added[basename]) {
                         return false;
                     }
