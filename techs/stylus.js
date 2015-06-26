@@ -1,5 +1,5 @@
 /**
- * css-stylus
+ * stylus
  * ==========
  *
  * Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
@@ -18,7 +18,7 @@
  * **Пример**
  *
  * ```javascript
- * nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
+ * nodeConfig.addTech(require('enb-stylus/techs/stylus'));
  * ```
  */
 var path = require('path'),
@@ -31,7 +31,7 @@ var path = require('path'),
     autoprefixer = require('autoprefixer-core');
 
 module.exports = require('enb/lib/build-flow').create()
-    .name('css-stylus')
+    .name('stylus')
     .target('target', '?.css')
     .defineOption('compress', false)
     .defineOption('prefix', '')

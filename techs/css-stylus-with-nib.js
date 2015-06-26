@@ -19,7 +19,7 @@
  * ```
  */
 
-module.exports = require('./css-stylus').buildFlow()
+module.exports = require('./stylus').buildFlow()
     .name('css-stylus-with-nib')
     .methods({
         _configureRenderer: function (renderer) {

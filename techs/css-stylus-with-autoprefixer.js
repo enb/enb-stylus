@@ -25,7 +25,7 @@
 
 var autoprefixer = require('autoprefixer-core');
 
-module.exports = require('./css-stylus').buildFlow()
+module.exports = require('./stylus').buildFlow()
     .name('css-stylus-with-autoprefixer')
     .defineOption('browsers')
     .defineOption('autoprefixerArguments')
