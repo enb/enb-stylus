@@ -4,7 +4,7 @@ enb-stylus
 [![NPM version](http://img.shields.io/npm/v/enb-stylus.svg?style=flat)](http://www.npmjs.org/package/enb-stylus) [![Build Status](http://img.shields.io/travis/enb-make/enb-stylus/master.svg?style=flat&label=tests)](https://travis-ci.org/enb-make/enb-stylus) [![Dependency Status](http://img.shields.io/david/enb-make/enb-stylus.svg?style=flat)](https://david-dm.org/enb-make/enb-stylus)
 
 Поддержка Stylus для ENB. Пакет содержит технологии:
- * `enb-stylus/techs/css-stylus`
+ * `enb-stylus/techs/stylus`
  * `enb-stylus/techs/css-stylus-with-nib`
  * `enb-stylus/techs/css-stylus-with-autoprefixer`
 
@@ -15,7 +15,7 @@ enb-stylus
 npm install enb-stylus
 ```
 
-css-stylus
+stylus
 ----------
 
 Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
@@ -32,7 +32,7 @@ css-stylus
 **Пример**
 
 ```javascript
-nodeConfig.addTech(require('enb-stylus/techs/css-stylus'));
+nodeConfig.addTech(require('enb-stylus/techs/stylus'));
 ```
 
 css-stylus-with-nib
