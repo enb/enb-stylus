@@ -6,7 +6,6 @@ enb-stylus
 Поддержка Stylus для ENB. Пакет содержит технологии:
  * `enb-stylus/techs/stylus`
  * `enb-stylus/techs/css-stylus-with-nib`
- * `enb-stylus/techs/css-stylus-with-autoprefixer`
 
 Установка:
 ----------
@@ -54,26 +53,4 @@ css-stylus-with-nib
 
 ```javascript
 nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-nib'));
-```
-
-css-stylus-with-autoprefixer
-----------------------------
-
-Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
-Производит пост-обработку автопрефиксером.
-
-**Опции**
-
-* *String* **target** — Результирующий таргет. По умолчанию `?.css`.
-* *Boolean* **compress** - Минифицировать результирующий CSS. По умолчанию `false`.
-* *String* **prefix** - Префикс, добавляемый классам в результирующем CSS. По умолчанию `''`.
-* *Object* **variables** — Дополнительные переменные окружения для `stylus`.
-* *Array* **browsers** — Браузеры (опция автопрефиксера).
-* *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
-  (его предоставляет технология `files`). По умолчанию — `?.files`.
-
-**Пример**
-
-```javascript
-nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-autoprefixer'), {autoprefixerArguments: ['ie 7', 'ie 8']});
 ```
