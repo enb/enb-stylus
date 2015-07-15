@@ -55,6 +55,7 @@ var path = require('path'),
     url = require('postcss-url'),
     stylus = require('stylus'),
     autoprefixer = require('autoprefixer-core'),
+    nib = require('nib'),
     EOL = require('os').EOL;
 
 module.exports = require('enb/lib/build-flow').create()
@@ -69,6 +70,7 @@ module.exports = require('enb/lib/build-flow').create()
     .defineOption('prefix', '')
     .defineOption('includes', [])
     .defineOption('hoist', false)
+    .defineOption('useNib', false)
     .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
         var node = this.node,
@@ -155,6 +157,12 @@ module.exports = require('enb/lib/build-flow').create()
                 this._includes.forEach(function (path) {
                     renderer.include(path);
                 });
+            }
+
+            if (this._useNib) {
+                renderer
+                    .use(nib())
+                    .import(nib.path + '/nib');
             }
 
             var defer = vow.defer();
