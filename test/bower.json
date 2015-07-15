@@ -1,0 +1,7 @@
+{
+  "name": "enb-stylus-fixtures",
+  "private": true,
+  "dependencies": {
+    "stylus": "stylus/stylus#0.51.1"
+  }
+}

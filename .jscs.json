@@ -1,7 +1,8 @@
 {
     "excludeFiles": [
         "node_modules/**",
-        "coverage/**"
+        "coverage/**",
+        "test/fixtures"
     ],
     "requireSpaceAfterKeywords": [
         "if",
@@ -25,7 +26,6 @@
     "disallowSpacesInNamedFunctionExpression": {
         "beforeOpeningRoundBrace": true
     },
-    "requireMultipleVarDecl": true,
     "requireBlocksOnNewline": 1,
     "disallowPaddingNewlinesInBlocks": true,
     "disallowSpacesInsideArrayBrackets": "nested",

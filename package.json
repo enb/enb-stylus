@@ -51,12 +51,21 @@
     "vow": "0.4.9"
   },
   "devDependencies": {
+    "bower": "1.4.1",
+    "bower-npm-install": "0.5.9",
+    "deep-extend": "0.4.0",
     "enb": ">=0.8.43 <1.0.0",
     "jscs": "1.13.1",
-    "jshint": "2.7.0"
+    "jshint": "2.7.0",
+    "mocha": "2.2.4",
+    "mock-enb": "0.0.2",
+    "mock-fs": "3.0.0",
+    "must": "0.12.0"
   },
   "scripts": {
-    "test": "npm run lint",
-    "lint": "jshint . && jscs ."
+    "test": "npm run lint && npm run unit",
+    "fixtures": "cd test && bower-npm-install",
+    "lint": "jshint . && jscs .",
+    "unit": "npm run fixtures && mocha"
   }
 }
