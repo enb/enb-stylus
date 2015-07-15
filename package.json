@@ -56,6 +56,7 @@
     "bower-npm-install": "0.5.9",
     "deep-extend": "0.4.0",
     "enb": ">=0.8.43 <1.0.0",
+    "istanbul": "0.3.17",
     "jscs": "1.13.1",
     "jshint": "2.7.0",
     "mocha": "2.2.4",
@@ -65,8 +66,10 @@
   },
   "scripts": {
     "test": "npm run lint && npm run unit",
-    "fixtures": "cd test && bower-npm-install",
+    "unit": "npm run fixtures && mocha",
     "lint": "jshint . && jscs .",
-    "unit": "npm run fixtures && mocha"
+    "fixtures": "cd test && bower-npm-install",
+    "cover": "istanbul cover _mocha",
+    "coveralls": "npm i coveralls && npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   }
 }
