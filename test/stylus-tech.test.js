@@ -6,7 +6,8 @@ var fs = require('fs'),
     MockNode = require('mock-enb/lib/mock-node'),
     FileList = require('enb/lib/file-list'),
     StylusTech = require('../techs/stylus'),
-    stylus = mockFsHelper.duplicateFSInMemory(path.join(__dirname, 'fixtures', 'stylus'));
+    stylus = mockFsHelper.duplicateFSInMemory(path.join(__dirname, 'fixtures', 'stylus')),
+    nib = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'nib'));
 
 describe('stylus-tech', function () {
     afterEach(function () {
@@ -223,6 +224,21 @@ describe('stylus-tech', function () {
             });
         });
     });
+
+    describe('nib', function () {
+        it('must use mixins', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': 'body { size: 5em 10em; }'
+                    }
+                },
+                expected = 'body{width:5em;height:10em;}';
+
+            return build(scheme, { useNib: true }).then(function (actual) {
+                actual.must.equal(expected);
+            });
+        });
+    });
 });
 
 function build (scheme, options) {
@@ -231,7 +247,8 @@ function build (scheme, options) {
             bundle: {},
             // jscs:disable
             node_modules: {
-                stylus: stylus
+                stylus: stylus,
+                nib: nib
             }
             // jscs:enable
         },

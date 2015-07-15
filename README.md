@@ -5,7 +5,6 @@ enb-stylus
 
 Поддержка Stylus для ENB. Пакет содержит технологии:
  * `enb-stylus/techs/stylus`
- * `enb-stylus/techs/css-stylus-with-nib`
 
 Установка:
 ----------
@@ -32,25 +31,4 @@ stylus
 
 ```javascript
 nodeConfig.addTech(require('enb-stylus/techs/stylus'));
-```
-
-css-stylus-with-nib
--------------------
-
-Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
-При сборке *styl*-файлов использует `nib`.
-
-**Опции**
-
-* *String* **target** — Результирующий таргет. По умолчанию `?.css`.
-* *Boolean* **compress** - Минифицировать результирующий CSS. По умолчанию `false`.
-* *String* **prefix** - Префикс, добавляемый классам в результирующем CSS. По умолчанию `''`.
-* *Object* **variables** — Дополнительные переменные окружения для `stylus`.
-* *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
-  (его предоставляет технология `files`). По умолчанию — `?.files`.
-
-**Пример**
-
-```javascript
-nodeConfig.addTech(require('enb-stylus/techs/css-stylus-with-nib'));
 ```
