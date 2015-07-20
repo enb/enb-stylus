@@ -24,9 +24,10 @@ var fs = require('fs'),
         'object',
         'operators',
 
-        // @namespace buggy remove after @import in stylus file
-        // https://github.com/stylus/stylus/issues/1921
-        'atrules',
+        // skip this test, because on BEM project we don't need to check
+        // for the file while you override links on stylus
+        // for history: https://github.com/stylus/stylus/issues/1951
+        'import.include.resolver.nested',
 
         // The skipped tests cases for which written tests inside the package enb-stylus.
         // It need to take into account the work stylus + postcss
@@ -84,7 +85,7 @@ addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) 
             comments: false,
             imports: (test.indexOf('include') !== -1 || test.indexOf('import.include.resolver.css-file') !== -1) &&
                 'include',
-            url: (test.indexOf('resolver') !== -1 && 'rebase') || test.indexOf('functions.url') !== -1 && 'inline'
+            url: test.indexOf('resolver') !== -1 && 'rebase' || test.indexOf('functions.url') !== -1 && 'inline'
         }
     )
     .spread(function (source) {
