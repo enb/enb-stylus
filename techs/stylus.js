@@ -146,11 +146,12 @@ module.exports = require('enb/lib/build-flow').create()
                 .set('hoist atrules', this._hoist);
 
             // rebase url() in all cases on stylus level
-            if (['rebase', 'inline'].indexOf(this._url) > -1) {
-                // need to rebase url()
+            if (['rebase', 'inline'].indexOf(this._url) !== -1) {
+                // only rebase url() on stylus level
                 renderer
                     .set('resolve url', true)
-                    .define('url', stylus.resolver());
+                    // set `nocheck` for fixed github.com/stylus/stylus/issues/1951
+                    .define('url', stylus.resolver({ nocheck: true }));
             }
 
             if (this._includes) {
