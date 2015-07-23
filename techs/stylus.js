@@ -56,7 +56,8 @@ var path = require('path'),
     stylus = require('stylus'),
     autoprefixer = require('autoprefixer-core'),
     nib = require('nib'),
-    EOL = require('os').EOL;
+    EOL = require('os').EOL,
+    csswring = require('csswring');
 
 module.exports = require('enb/lib/build-flow').create()
     .name('stylus')
@@ -139,7 +140,6 @@ module.exports = require('enb/lib/build-flow').create()
             }
 
             var renderer = stylus(content)
-                .set('compress', this._compress)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
                 .set('sourcemap', map)
@@ -227,6 +227,11 @@ module.exports = require('enb/lib/build-flow').create()
                         autoprefixer({ browsers: this._autoprefixer.browsers }) :
                         autoprefixer)
                 );
+            }
+
+            // compress css
+            if (this._compress) {
+                processor.use(csswring());
             }
 
             return processor.process(css, opts);
