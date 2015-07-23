@@ -24,6 +24,13 @@ var fs = require('fs'),
         'object',
         'operators',
 
+        // not use native stylus compress option,
+        // by default, compression is a `postcss` plugin `csswring`
+        'atrules.compressed',
+        'compress.units',
+        'regression.248.compressed',
+        'compress.comments',
+
         // skip this test, because on BEM project we don't need to check
         // for the file while you override links on stylus
         // for history: https://github.com/stylus/stylus/issues/1951
@@ -77,7 +84,6 @@ addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) 
     node.runTechAndGetContent(
         StylusTech, {
             includes: ['./images', './cases/import.basic'],
-            compress: test.indexOf('compress') !== -1,
             prefix: test.indexOf('prefix.') !== -1 && 'prefix-',
             hoist: test.indexOf('hoist.') !== -1 || test.indexOf('rule.charset') !== -1,
 
