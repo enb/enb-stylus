@@ -1,52 +1,3 @@
-/**
- * stylus
- * ==========
- *
- * Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
- *
- * **Опции**
- *
- * * *String* **target** — Результирующий таргет. По умолчанию `?.css`.
- *
- * * *String|Boolean* **imports** — Раскрытие css @import-ов. По умолчанию `include`.
- *      *String* **include** – css @import будут раскрыты
- *      *Boolean* **false** - css @import будут проигнорированы и попадут в результирующий таргет как есть
- *
- * * *String* **url** – Определяем каким образом будут обработы `url()` в `styl` файле.
- *      *String* **rebase** – пути изменятся относительно собранного таргета.
- *      было: background: url('block_image.png')
- *      станет: background: url('../../common.block/block/block_image.png')
- *      *String* **inline** – файл будет закодирован в base64 код
- *
- * * *Boolean* **comments** — Добавляет разделяющие комментарии между стилями,
- * содержащие относительный путь до исходного файла.
- *    По умолчанию `true`
- *
- * * *Boolean|Object* **sourcemap** — Включает генерацию `sourcemap`. По умолчанию `false`.
- *      *Boolean* **true** – генерация `sourcemap`.
- *      *String* **inline** – генерация инлайнового `sourcemap`.
- *
- * * *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
- *   (его предоставляет технология `files`). По умолчанию — `?.files`.
- *
- * * *Boolean|Object* **autoprefixer** - Использовать `autoprefixer` при сборке `css`. По умолчанию `false`.
- * *    *Array* **autoprefixer.browsers** - Браузеры (опция автопрефиксера).
- *
- * * *Boolean* **compress** – Минифицирует результат рендеринга stylus, по умолчанию `false`
- *
- * * *String* **prefix** – Добавляет префикс ко всем css классам,  по умолчанию `false`
- *
- * * *Array* **includes** — Дополнительные пути, которые будут использованы при обработки `@import` и `url()`.
- *    В основном может быть использовано при подключении сторонних библиотек, например `nib`
- *
- * * *Boolean* **hoist** – Перенос всех @import-ов и @charset-ов в начало файла.
- *
- * **Пример**
- *
- * ```javascript
- * nodeConfig.addTech(require('enb-stylus/techs/stylus'));
- * ```
- */
 var path = require('path'),
     vow = require('vow'),
     vfs = require('enb/lib/fs/async-fs'),
@@ -59,6 +10,87 @@ var path = require('path'),
     EOL = require('os').EOL,
     csswring = require('csswring');
 
+/**
+ * @class StylusTech
+ * @augments {BaseTech}
+ * @classdesc
+ *
+ * Builds CSS from Stylus and CSS sources.<br/><br/>
+ *
+ * Files processing in 3 steps:<br/>
+ * 1. Prepares list of @import sources (contain .styl and .css source code).<br/>
+ * 2. Expands Stylus @import and processes it with the [Stylus renderer]{@link https://github.com/stylus/stylus}.<br/>
+ * 3. Expands the remaining CSS @import and processes the received common CSS using
+ * [Postcss]{@link https://github.com/postcss/postcss}.<br/><br/>
+ *
+ * Important: `prefix`, `includes`, `hoist`, `useNib` options are enabled only for Stylus source code.<br/>
+ *
+ * @param {Object}          [options]                                 Options
+ * @param {String}          [options.filesTarget='?.files']           Path to target with
+ *                                                                    [FileList]{@link http://bit.ly/1GTUOj0}
+ * @param {String[]}        [options.sourceSuffixes=['styl', 'css']]  Files with specified suffixes involved in
+ *                                                                    the assembly. Default: `styl`, `css`
+ * @param {String|Boolean}  [options.url='rebase']                    Rebases or inlines url():<br/>
+ *                                                                    - `rebase` – resolves a path relative to the
+ *                                                                    bundle directory.<br/>
+ *                                                                    - `inline` – inlines assets using base64 encoding.
+ * @param {Boolean}         [options.comments=true]                   Adds CSS comment with path to source to a code
+ *                                                                    block (above and below).<br/>
+ * @param {String|Boolean}  [options.imports='include']               Allows to include(expand) @import or leave without
+ *                                                                    changes.
+ * @param {Boolean|String}  [options.sourcemap=false]                 Builds sourcemap:<br/>
+ *                                                                    - `true` – builds ?.css.map.<br/>
+ *                                                                    - `inline` – builds and inlining sourcemap into
+ *                                                                    bundled CSS file.
+ * @param {Boolean|Object}  [options.autoprefixer=false]              Adds vendor prefixes using autoprefixer:<br/>
+ *                                                                    - `true` – enables autoprefixer and defines what
+ *                                                                    prefixes should be used based on
+ *                                                                    [CanIUse]{@link http://caniuse.com} data.<br/>
+ *                                                                    - `{browsers: ['last 2 versions']}` – allows to
+ *                                                                    set custom browsers.
+ * @param {Boolean}         [options.compress=false]                  Minifies styles. Supports sourcemap.
+ * @param {String}          [options.prefix='']                       Adds prefix to CSS classes.<br/>
+ *                                                                    Important: Available for Stylus only.
+ * @param {String[]}        [options.includes=[]]                     Adds additional path to resolve a path in @import
+ *                                                                    and url().<br/>
+ *                                                                    [Stylus: include]{@link http://bit.ly/1IpsoTh}
+ *                                                                    <br/>
+ *                                                                    Important: Available for Stylus only.
+ * @param {Boolean}         [options.hoist=false]                     Moves @import and @charset to the top.<br/>
+ *                                                                    Important: Available for Stylus only.
+ * @param {Boolean}         [options.useNib=false]                    Allows to use Nib library for Stylus.<br/>
+ *                                                                    Important: Available for Stylus only.
+ *
+ * @example
+ * // Styles in file system before build:
+ * // blocks/
+ * // ├── block1.styl
+ * // └── block2.css
+ * //
+ * // After build:
+ * // bundle/
+ * // └── bundle.css
+ *
+ * var stylusTech = require('enb-stylus/techs/stylus'),
+ *     FileProvideTech = require('enb/techs/file-provider'),
+ *     bem = require('enb-bem-techs');
+ *
+ * module.exports = function(config) {
+ *     config.node('bundle', function(node) {
+ *         // get FileList
+ *         node.addTechs([
+ *             [FileProvideTech, { target: '?.bemdecl.js' }],
+ *             [bem.levels, levels: ['blocks']],
+ *             bem.deps,
+ *             bem.files
+ *         ]);
+ *
+ *         // build css file
+ *         node.addTech(stylusTech);
+ *         node.addTarget('?.css');
+ *     });
+ * };
+ */
 module.exports = require('enb/lib/build-flow').create()
     .name('stylus')
     .target('target', '?.css')
@@ -75,11 +107,12 @@ module.exports = require('enb/lib/build-flow').create()
     .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
         var node = this.node,
-            filename = node.resolvePath(path.basename(this._target));
+            filename = node.resolvePath(path.basename(this._target)),
+            stylesImports = this._prepareImports(sourceFiles);
 
-        return this._processStylus(filename, this._prepareImports(sourceFiles))
-            .spread(function (renderer, css) {
-                return this._processCss(filename, css, renderer);
+        return this._processStylus(filename, stylesImports)
+            .spread(function (css, sourcemap) {
+                return this._processCss(filename, css, sourcemap);
             }, this)
             .then(function (result) {
                 return this._writeMap(filename + '.map', result.map)
@@ -89,13 +122,44 @@ module.exports = require('enb/lib/build-flow').create()
             }, this);
     })
 
-    .methods({
+    .methods(/** @lends StylusTech.prototype */{
+
+        /**
+         * Prepares the list of @import sources.
+         *
+         * @private
+         * @param {Array} sourceFiles – paths to the files that contain styles for processing
+         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @returns {String} – list of @import
+         */
         _prepareImports: function (sourceFiles) {
             var added = {},
                 node = this.node;
 
             return sourceFiles
                 .filter(function (file) {
+                    /**
+                     * This code is used when block has a lot of files that include styles.
+                     *
+                     * Case #1:
+                     * blocks/
+                     * ├── block.styl
+                     * └── block.css
+                     * Will be used `.styl`
+                     *
+                     * Case #2:
+                     * blocks/
+                     * ├── block.styl
+                     * ├── block.ie.styl
+                     * └── block.css
+                     * Will be used `.styl` and `.ie.styl`
+                     *
+                     * Case #3:
+                     * blocks/
+                     * ├── block.css
+                     * ├── block.ie.css
+                     * Will be used `.css` and `.ie.css`
+                     */
                     var basename = file.fullname.substring(0, file.fullname.lastIndexOf('.'));
 
                     if (added[basename]) {
@@ -125,11 +189,28 @@ module.exports = require('enb/lib/build-flow').create()
                 }, this).join(EOL);
         },
 
+        /**
+         * Configure Stylus renderer.
+         * Could be used for overriding render options.
+         *
+         * @protected
+         * @param {Object} renderer – instance of Stylus renderer class
+         * @returns {Object} – instance of Stylus renderer class
+         */
         _configureRenderer: function (renderer) {
             return renderer;
         },
 
-        _processStylus: function (filename, content) {
+        /**
+         * Process Stylus files.
+         *
+         * @private
+         * @param {String} filename – filename of the target
+         * @param {String} stylesImports – list of @import to process
+         * @returns {Promise[]} – promise with sourcemap of Stylus file and content with expanded @import with
+         * Stylus sources and list of @import with CSS sources, that would expand on next step
+         */
+        _processStylus: function (filename, stylesImports) {
             var map = !!this._sourcemap;
 
             if (map) {
@@ -139,7 +220,7 @@ module.exports = require('enb/lib/build-flow').create()
                 };
             }
 
-            var renderer = stylus(content)
+            var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
                 .set('sourcemap', map)
@@ -147,7 +228,6 @@ module.exports = require('enb/lib/build-flow').create()
 
             // rebase url() in all cases on stylus level
             if (['rebase', 'inline'].indexOf(this._url) !== -1) {
-                // only rebase url() on stylus level
                 renderer
                     .set('resolve url', true)
                     // set `nocheck` for fixed github.com/stylus/stylus/issues/1951
@@ -169,12 +249,21 @@ module.exports = require('enb/lib/build-flow').create()
             var defer = vow.defer();
 
             this._configureRenderer(renderer).render(function (err, css) {
-                err ? defer.reject(err) : defer.resolve([renderer.sourcemap, css]);
+                err ? defer.reject(err) : defer.resolve([css, renderer.sourcemap]);
             });
 
             return defer.promise();
         },
 
+        /**
+         * Process CSS files.
+         *
+         * @private
+         * @param {String} filename – filename of the target
+         * @param {String} css – list of CSS @import to process and CSS code received after rendering Stylus source code
+         * @param {Object} sourcemap – sourcemap of Stylus source code
+         * @returns {Promise} – promise with processed css and sourcemap (options)
+         */
         _processCss: function (filename, css, sourcemap) {
             var _this = this,
                 processor = postcss(),
@@ -237,9 +326,17 @@ module.exports = require('enb/lib/build-flow').create()
             return processor.process(css, opts);
         },
 
-        _writeMap: function (filename, map) {
+        /**
+         * Write sourcemap to file system in target directory
+         *
+         * @private
+         * @param {String} filename – filename for map, e.g. /Users/project/bundle/bundle.css.map
+         * @param {Object} data – data of sourcemap
+         * @returns {Promise}
+         */
+        _writeMap: function (filename, data) {
             if (this._sourcemap && !this._sourcemap.inline) {
-                return vfs.write(filename, JSON.stringify(map));
+                return vfs.write(filename, JSON.stringify(data));
             }
 
             return vow.resolve();
