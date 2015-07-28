@@ -175,7 +175,7 @@ module.exports = require('enb/lib/build-flow').create()
                         pre = '',
                         post = '';
 
-                    if (file.suffix === 'styl') {
+                    if (file.suffix.indexOf('styl') !== -1) {
                         if (this._comments) {
                             pre = '/* ' + url + ':begin */' + EOL;
                             post = '/* ' + url + ':end */' + EOL;
@@ -297,7 +297,7 @@ module.exports = require('enb/lib/build-flow').create()
                             post = '/* ' + url + ':end */' + EOL;
                         }
 
-                        res = pre + content + post;
+                        res = pre + content + EOL + post;
 
                         return res;
                     }
