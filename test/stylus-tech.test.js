@@ -304,12 +304,12 @@ describe('stylus-tech', function () {
                 },
 
                 expected = [
-                    '/* ../blocks/block.styl:begin */',
+                    ['/* ..', 'blocks', 'block.styl:begin */'].join(path.sep),
                     'body {',
                     '  color: #000;',
                     '}',
-                    '/* ../blocks/block.styl:end */'
-                ].join(EOL);
+                    ['/* ..', 'blocks', 'block.styl:end */'].join(path.sep)
+                ].join('\n'); // Stylus \n for line break
 
             return build(scheme, { comments: true }).then(function (actual) {
                 actual.must.contain(expected);
@@ -328,11 +328,11 @@ describe('stylus-tech', function () {
                 },
 
                 expected = [
-                    '/* ../blocks/block.css:begin */',
+                    ['/* ..', 'blocks', 'block.css:begin */'].join(path.sep),
                     'body {',
                     '  color: #000;',
                     '}',
-                    '/* ../blocks/block.css:end */'
+                    ['/* ..', 'blocks', 'block.css:end */'].join(path.sep)
                 ].join(EOL);
 
             return build(scheme, { comments: true }).then(function (actual) {
@@ -357,17 +357,17 @@ describe('stylus-tech', function () {
                 },
 
                 expected = [
-                    '/* ../blocks/block.styl:begin */',
+                    ['/* ..', 'blocks', 'block.styl:begin */'].join(path.sep),
                     'body {',
                     '  color: #000;',
                     '}',
-                    '/* ../blocks/block.styl:end */',
-                    '/* ../blocks/block.ie.styl:begin */',
+                    ['/* ..', 'blocks', 'block.styl:end */'].join(path.sep),
+                    ['/* ..', 'blocks', 'block.ie.styl:begin */'].join(path.sep),
                     'body {',
                     '  color: #fff;',
                     '}',
-                    '/* ../blocks/block.ie.styl:end */'
-                ].join(EOL);
+                    ['/* ..', 'blocks', 'block.ie.styl:end */'].join(path.sep)
+                ].join('\n'); // Stylus \n for line break
 
             return build(scheme, { comments: true, sourceSuffixes: ['styl', 'css', 'ie.styl'] })
                 .then(function (actual) {
