@@ -290,6 +290,120 @@ describe('stylus-tech', function () {
             });
         });
     });
+
+    describe('comments', function () {
+        it('must added comments for Stylus', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': [
+                            'body {',
+                            '  color: #000;',
+                            '}'
+                        ].join(EOL)
+                    }
+                },
+
+                expected = [
+                    '/* ../blocks/block.styl:begin */',
+                    'body {',
+                    '  color: #000;',
+                    '}',
+                    '/* ../blocks/block.styl:end */'
+                ].join(EOL);
+
+            return build(scheme, { comments: true }).then(function (actual) {
+                actual.must.contain(expected);
+            });
+        });
+
+        it('must added comments for CSS file', function () {
+            var scheme = {
+                    blocks: {
+                        'block.css': [
+                            'body {',
+                            '  color: #000;',
+                            '}'
+                        ].join(EOL)
+                    }
+                },
+
+                expected = [
+                    '/* ../blocks/block.css:begin */',
+                    'body {',
+                    '  color: #000;',
+                    '}',
+                    '/* ../blocks/block.css:end */'
+                ].join(EOL);
+
+            return build(scheme, { comments: true }).then(function (actual) {
+                actual.must.contain(expected);
+            });
+        });
+
+        it('must added comments for Stylus file with suffix', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': [
+                            'body {',
+                            '  color: #000;',
+                            '}'
+                        ].join(EOL),
+                        'block.ie.styl': [
+                            'body {',
+                            '  color: #fff;',
+                            '}'
+                        ].join(EOL)
+                    }
+                },
+
+                expected = [
+                    '/* ../blocks/block.styl:begin */',
+                    'body {',
+                    '  color: #000;',
+                    '}',
+                    '/* ../blocks/block.styl:end */',
+                    '/* ../blocks/block.ie.styl:begin */',
+                    'body {',
+                    '  color: #fff;',
+                    '}',
+                    '/* ../blocks/block.ie.styl:end */'
+                ].join(EOL);
+
+            return build(scheme, { comments: true, sourceSuffixes: ['styl', 'css', 'ie.styl'] })
+                .then(function (actual) {
+                    actual.must.contain(expected);
+                });
+        });
+    });
+
+    describe('other', function () {
+        it('must use only .styl file if an entity has multiple files', function () {
+            var scheme = {
+                    blocks: {
+                        'block.css': [
+                            'body {',
+                            '  color: #fff;',
+                            '}'
+                        ].join(EOL),
+                        'block.styl': [
+                            'body {',
+                            '  color: #000;',
+                            '}'
+                        ].join(EOL)
+                    }
+                },
+
+                expected = [
+                    'body{',
+                    'color:#000;',
+                    '}'
+                ].join('');
+
+            return build(scheme).then(function (actual) {
+                actual.must.contain(expected);
+            });
+        });
+    });
 });
 
 function build (scheme, options) {
@@ -315,7 +429,7 @@ function build (scheme, options) {
     bundle.provideTechData('?.files', fileList);
 
     return bundle.runTechAndGetContent(StylusTech, commonOptions).spread(function (content) {
-        return commonOptions.compress ? content : normalizeContent(content);
+        return (commonOptions.compress || commonOptions.comments) ? content : normalizeContent(content);
     });
 }
 
