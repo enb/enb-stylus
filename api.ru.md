@@ -1,0 +1,208 @@
+# API технологии stylus
+
+Собирает исходные файлы блоков со стилями, написанными в синтаксисе Stylus (файлы с расширением `.styl`), или на чистом CSS (файлы с расширением `.css`).
+
+Использует CSS-препроцессор [Stylus](https://github.com/stylus/stylus) для компиляции Stylus-файлов в CSS-код.
+
+Результатом сборки является CSS-файл. Для обработки итогового CSS используется CSS-построцессор [postcss](https://github.com/postcss/postcss).
+
+### Опции
+
+* [target](#target)
+* [filesTarget](#filestarget)
+* [sourceSuffixes](#sourcesuffixes)
+* [url](#url)
+* [comments](#comments)
+* [imports](#imports)
+* [sourcemap](#sourcemap)
+* [autoprefixer](#autoprefixer)
+* [compress](#compress)
+* [prefix](#prefix)
+* [includes](#includes)
+* [useNib](#usenib)
+
+#### target
+
+Тип: `String`. По умолчанию: `?.css`.
+
+Имя таргета, куда будет записан результат сборки необходимых `.styl`- и `.css`-файлов проекта.
+
+#### filesTarget
+
+Тип: `String`. По умолчанию: `?.files`.
+
+Имя таргета, откуда будет доступен список исходных файлов для сборки. Список файлов предоставляет технология [files](https://ru.bem.info/tools/bem/enb-bem-techs/readme/#files) пакета [enb-bem-techs](https://ru.bem.info/tools/bem/enb-bem-techs/readme/).
+
+#### sourceSuffixes
+
+Тип: `String | String[]`. По умолчанию: `['styl', 'css']`.
+
+Суффиксы, по которым отбираются файлы с стилей для дальнейшей сборки.
+
+#### url
+
+Тип: `String`. По умолчанию: `rebase`.
+
+Oбработка `url()` внутри файлов `.styl` и `.css`.
+
+*Допустимые значения:*
+
+- **inline:** содержимое файла будет закодировано в `base64`.
+
+    **Важно:**
+
+    - Размер не должен превышать `14kb`.
+    - Не поддерживается кодирование `.svg`-файлов с хешем. Например: `url(image.svg#hash)`. Такие `url()` не будут обработаны.
+
+    --------------------------------------
+
+- **rebase:** изменение пути к содержимому относительно таргета.
+
+  Пример:
+
+  ```
+  blocks/
+  └── block/
+      ├── block.styl
+      └── block.png
+  bundle/
+  └── bundle.css # таргет
+  ```
+
+  Исходный файл `block.styl`:
+
+  ```css
+  .block
+      background-image: url(block.png)
+  ```
+
+  Файл для подключения на страницу `bundle.css`:
+
+  ```css
+  .block
+  {
+    background-image: url(../../blocks/block/block.png);
+  }
+  ```
+
+#### comments
+
+Тип: `Boolean`. По умолчанию: `true`.
+
+Обрамление комментариями CSS-кода в собранном файле. Комментарии cодержат относительный путь до исходного файла. Может быть использовано при разработке проекта.
+
+**Пример**
+
+```css
+/* ../../blocks/block/block.styl:begin */
+.block
+{
+    background-image: url(../../blocks/block/block.png);
+}
+/* ../../blocks/block/block.styl:end */
+```
+
+#### imports
+
+Тип: `String`. По умолчанию: `include`.
+
+Раскрытие CSS `@import`-ов.
+
+*Допустимые значения:*
+
+- **include:** `@import` будет удален, вместо него в собираемый файл будет добавлено его содержимое.
+
+#### sourcemap
+
+Тип: `String | Boolean`. По умолчанию: `false`.
+
+Построение карт кода (sourcemap) с информацией об исходных файлах.
+
+*Допустимые значения:*
+
+- **true:** карта хранится в отдельном файле с расширение `.map`.  
+- **inline:** карта встраивается в скомпилированный файл в виде закодированной строки в формате `base64`.  
+
+#### autoprefixer
+
+Тип: `Object | Boolean`. По умолчанию: `false`.
+
+Добавление вендорных префиксов с помощью [autoprefixer](https://github.com/postcss/autoprefixer).
+
+*Допустимые значения:*
+
+- **false:** отключает `autoprefixer`.
+- **true:** префиксы добавляются для самых актуальных версий браузеров на основании данных сервиса [caniuse.com](http://caniuse.com).
+- **browsers: String[]:** задание конфигурации в случае, если требуется передать точный список поддерживаемых браузеров.
+
+ Пример:
+
+ ```js
+ {
+     autoprefixer: { browsers: ['Explorer 10', 'Opera 12'] }
+ }
+ ```
+
+ Подробнее в документации [autoprefixer](https://github.com/postcss/autoprefixer#browsers).
+
+#### compress
+
+Тип: `Boolean`. По умолчанию: `false`.
+
+Минификация CSS-кода. Поддерживает карты кода (sourcemap).
+
+#### prefix
+
+Тип: `String`. По умолчанию: `''`.
+
+Добавление префикса для CSS-классов.
+
+**Важно!** Опция работает только для файлов с расширением `.styl`.
+
+#### includes
+
+Тип: `String | String[]`. По умолчанию: `[]`.
+
+Задает пути, которые будут использованы при обработке `@import` и `url()`.
+Может быть использовано при подключении сторонних библиотек, например, `nib`.
+
+**Важно!** Опция работает только для файлов с расширением `.styl`.
+
+### useNib
+
+Тип: `Boolean`. По умолчанию: `false`.
+
+Подключение библиотеки CSS3-миксинов для Stylus – [nib](https://github.com/tj/nib).
+
+**Важно!** Опция работает только для файлов с расширением `.styl`.
+
+--------------------------------------
+
+## Пример использования технологии
+
+```javascript
+var stylusTech = require('enb-stylus/techs/stylus'),
+    FileProvideTech = require('enb/techs/file-provider'),
+    bem = require('enb-bem-techs');
+
+module.exports = function(config) {
+    config.node('bundle', function(node) {
+        // Получаем имена файлов (FileList)
+        node.addTechs([
+            [FileProvideTech, { target: '?.bemdecl.js' }],
+            [bem.levels, levels: ['blocks']],
+            bem.deps,
+            bem.files
+        ]);
+
+        // Создаем CSS-файлы
+        node.addTech([stylusTech, { /* опции */ }]);
+        node.addTarget('?.css');
+    });
+};
+```
+
+Лицензия
+--------
+
+© 2014 YANDEX LLC. Код лицензирован [Mozilla Public License 2.0](LICENSE.txt).
