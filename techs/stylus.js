@@ -23,7 +23,7 @@ var path = require('path'),
  * 3. Expands the remaining CSS @import and processes the received common CSS using
  * [Postcss]{@link https://github.com/postcss/postcss}.<br/><br/>
  *
- * Important: `prefix`, `includes`, `hoist`, `useNib` options are enabled only for Stylus source code.<br/>
+ * Important: `prefix`, `includes`, `useNib` options are enabled only for Stylus source code.<br/>
  *
  * @param {Object}          [options]                                 Options
  * @param {String}          [options.filesTarget='?.files']           Path to target with
@@ -55,8 +55,6 @@ var path = require('path'),
  *                                                                    and url().<br/>
  *                                                                    [Stylus: include]{@link http://bit.ly/1IpsoTh}
  *                                                                    <br/>
- *                                                                    Important: Available for Stylus only.
- * @param {Boolean}         [options.hoist=false]                     Moves @import and @charset to the top.<br/>
  *                                                                    Important: Available for Stylus only.
  * @param {Boolean}         [options.useNib=false]                    Allows to use Nib library for Stylus.<br/>
  *                                                                    Important: Available for Stylus only.
@@ -102,7 +100,6 @@ module.exports = require('enb/lib/build-flow').create()
     .defineOption('compress', false)
     .defineOption('prefix', '')
     .defineOption('includes', [])
-    .defineOption('hoist', false)
     .defineOption('useNib', false)
     .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
@@ -223,8 +220,7 @@ module.exports = require('enb/lib/build-flow').create()
             var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
-                .set('sourcemap', map)
-                .set('hoist atrules', this._hoist);
+                .set('sourcemap', map);
 
             // rebase url() in all cases on stylus level
             if (['rebase', 'inline'].indexOf(this._url) !== -1) {

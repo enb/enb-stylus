@@ -31,6 +31,9 @@ var fs = require('fs'),
         'regression.248.compressed',
         'compress.comments',
 
+        // enb-technology `stylus` not use option `hoist atrules`
+        'hoist.at-rules',
+
         // skip this test, because on BEM project we don't need to check
         // for the file while you override links on stylus
         // for history: https://github.com/stylus/stylus/issues/1951
@@ -85,7 +88,6 @@ addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) 
         StylusTech, {
             includes: ['./images', './cases/import.basic'],
             prefix: test.indexOf('prefix.') !== -1 && 'prefix-',
-            hoist: test.indexOf('hoist.') !== -1 || test.indexOf('rule.charset') !== -1,
 
             // non stylus option
             comments: false,
