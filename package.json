@@ -37,7 +37,8 @@
   ],
   "contributors": [
     "Andrew Abramov <andrewblond@yandex.com>",
-    "Marat Dulin <mdevils@yandex.ru>"
+    "Marat Dulin <mdevils@yandex.ru>",
+    "Nickolay Ilchenko <tavriaforever@yandex.ru>"
   ],
   "peerDependencies": {
     "enb": ">=0.8.43 <1.0.0"

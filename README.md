@@ -3,32 +3,245 @@ enb-stylus
 
 [![NPM version](http://img.shields.io/npm/v/enb-stylus.svg?style=flat)](http://www.npmjs.org/package/enb-stylus) [![Build Status](http://img.shields.io/travis/enb-make/enb-stylus/master.svg?style=flat&label=tests)](https://travis-ci.org/enb-make/enb-stylus) [![Build status](https://img.shields.io/appveyor/ci/blond/enb-stylus.svg?style=flat&label=windows)](https://ci.appveyor.com/project/blond/enb-stylus) [![Coverage Status](https://img.shields.io/coveralls/enb-make/enb-stylus.svg?style=flat)](https://coveralls.io/r/enb-make/enb-stylus?branch=master) [![Dependency Status](http://img.shields.io/david/enb-make/enb-stylus.svg?style=flat)](https://david-dm.org/enb-make/enb-stylus)
 
-Поддержка Stylus для ENB. Пакет содержит технологии:
- * `enb-stylus/techs/stylus`
+Пакет предоставляет [ENB](https://ru.bem.info/tools/bem/enb-bem/)-технологию для сборки CSS- и Stylus-файлов в проектах, построенных по [методологии БЭМ](https://ru.bem.info/method/).
 
-Установка:
-----------
+Принципы работы технологии и ее API описаны в документе [API технологии](api.ru.md).
+
+**Совместимость:** технология пакета `enb-stylus` поддерживает версию [CSS-препроцессора Stylus](https://github.com/stylus/stylus) `0.52.0`.
+
+## Работа технологии
+
+В [БЭМ-методологии](https://ru.bem.info/method/filesystem/) стили к каждому блоку хранятся в отдельных файлах в директориях блоков.
+
+ENB-технология `stylus` позволяет писать код как в синтаксисе Stylus, так и на чистом CSS. Для компиляции Stylus-кода в CSS используется CSS-препроцессор [Stylus](https://github.com/stylus/stylus).
+
+В результате сборки вы получите CSS-файл. Для обработки итогового CSS используется CSS-построцессор [postcss](https://github.com/postcss/postcss).
+
+## Особенности работы пакета
+
+### Совместное использование Stylus и CSS
+
+В проекте допускается совместное использование `.css`- и `.styl`-файлов. Однако в рамках одного блока обе технологии не могут использоваться одновременно. Если стили блока реализованы и в CSS, и в Stylus, будет использоваться файл с расширением `.styl`.
+
+**Пример 1.** Если файл одного блока реализован в CSS-технологии, а файл другого — в Stylus:
 
 ```
-npm install enb-stylus
+blocks/
+└── block1/
+    └── block1.styl
+└── block2/
+    └── block2.css
+bundle
+└── bundle.css
 ```
 
-stylus
-----------
+В сборку попадут оба файла:
 
-Собирает *css*-файлы вместе со *styl*-файлами по deps'ам, обрабатывает инклуды и ссылки, сохраняет в виде `?.css`.
+```css
+@import "../blocks/block1/block1.styl";
+@import "../blocks/block1/block2.css";
+```
 
-**Опции**
+**Пример 2.** Если у одного блока есть несколько реалиализаций: файл c расширением `.styl` и файл c расширением `.css`:
 
-* *String* **target** — Результирующий таргет. По умолчанию `?.css`.
-* *Boolean* **compress** - Минифицировать результирующий CSS. По умолчанию `false`.
-* *String* **prefix** - Префикс, добавляемый классам в результирующем CSS. По умолчанию `''`.
-* *Object* **variables** — Дополнительные переменные окружения для `stylus`.
-* *String* **filesTarget** — files-таргет, на основе которого получается список исходных файлов
-  (его предоставляет технология `files`). По умолчанию — `?.files`.
+```
+blocks/
+└── block/
+    ├── block.styl
+    └── block.css
+bundle
+└── bundle.css
+```
+
+В сборку попадет только Stylus-файл:
+
+```css
+@import "../blocks/block/block.styl";
+```
+
+**Пример 3.** Если у одного блока есть несколько реалиализаций, но на разных уровнях переопределения:
+
+```
+common.blocks/
+└── block/
+    └── block.styl
+desktop.blocks/
+    └── block/
+        └── block.css
+bundle
+└── bundle.css
+```
+
+В сборку попадут оба файла:
+
+```css
+@import "../common.blocks/block/block.styl";
+@import "../desktop.blocks/block/block.css";
+```
+
+## Как начать использовать?
+
+**1.** Установите пакет `enb-stylus`:
+
+```sh
+$ npm install --save-dev enb-stylus
+```
+
+**Требования:** зависимость от пакета `enb` версии `0.8.43` или выше.
+
+**2.** Опишите код стилей в файле с расширением `.styl`:
+```
+ blocks/
+ └── block/
+     └── block.styl
+```
+
+**3.** Добавьте в конфигурационный файл `.enb/make.js` следующий код:
+
+```js
+var stylusTech = require('enb-stylus/techs/stylus'),
+    FileProvideTech = require('enb/techs/file-provider'),
+    bem = require('enb-bem-techs');
+
+module.exports = function(config) {
+    config.node('bundle', function(node) {
+        // Получаем список файлов (FileList)
+        node.addTechs([
+            [FileProvideTech, { target: '?.bemdecl.js' }],
+            [bem.levels, levels: ['blocks']],
+            bem.deps,
+            bem.files
+        ]);
+
+        // Строим CSS-файл
+        node.addTech([stylusTech, {
+            // target: '?.css',
+            // filesTarget: '?.files',
+            // sourceSuffixes: ['.styl', '.css'],
+            // url: 'rebase'
+            // imports: 'include',
+            // comments: true
+        }]);
+        node.addTarget('?.css');
+    });
+};
+```
+
+## Сборка отдельного бандла для IE
+
+Если в проекте есть стили, которые должны примениться только для IE, то их помещают в отдельный файл со специальным расширением `.ie*.styl`:
+
+* `.ie.styl` — стили для любого IE, ниже 9й версии.
+* `.ie6.styl` — стили для IE 6.
+* `.ie7.styl` — стили для IE 7.
+* `.ie8.styl` — стили для IE 8.
+* `.ie9.styl` — стили для IE 9.
+
+Чтобы собрать отдельный бандл для IE нужно:
+
+**1.** В папке блока создать один или несколько файлов c расширением `.ie*.styl`:
+
+```
+blocks/
+└── block/
+    ├── block.styl
+    ├── block.ie.styl
+    └── block.ie6.styl
+```
+
+**2.** Добавить еще технологию `StylusTech`:
+
+```js
+node.addTechs([
+   [stylusTech], // для основного CSS
+   [stylusTech]  // для IE
+]);
+```
+
+**3.** Добавить новую цель сборки для IE файла — `?.ie6.css`:
+
+```js
+node.addTechs([
+    [stylusTech],
+    [stylusTech, { target: '?.ie6.css' }]  // IE 6
+]);
+
+node.addTargets(['?.css', '?.ie6.css']);
+```
+
+**4.** В БЭМ проектах принято подключать стили через [Conditional Comments](https://msdn.microsoft.com/en-us/library/ms537512(v=vs.85).aspx).
 
 **Пример**
 
-```javascript
-nodeConfig.addTech(require('enb-stylus/techs/stylus'));
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <!--[if gt IE 9]><!-->
+            <link rel="stylesheet" href="index.css"/>
+        <!--<![endif]-->
+        <!--[if lte IE 9]>
+            <link rel="stylesheet" href="index.ie.css"/>
+        <![endif]-->
+    </head>
+    <body>
 ```
+
+Важно, чтобы файл, подключаемый для IE, содержал стили не только специфичные для него, но и общие для всей страницы.
+
+Чтобы собрать такой файл, нужно расширить список суффиксов с помощью опции [sourceSuffixed](api.ru.md#sourcesuffixes).
+
+```js
+node.addTechs([
+    [stylusTech],
+    [stylusTech, {
+        target: '?.ie6.css',
+        sourceSuffixes: [
+            'styl', 'css',          // Общие стили
+            'ie.styl', 'ie.css',    // Стили для IE < 9
+            'ie6.styl', 'ie6.css'   // Стили для IE 6
+        ]
+    }]
+]);
+node.addTargets(['?.css', '?.ie.css']);
+```
+
+В итоге получаем следующий конфигурационный файл `.enb/make.js`:
+
+```js
+var stylusTech = require('enb-stylus/techs/stylus'),
+    FileProvideTech = require('enb/techs/file-provider'),
+    bem = require('enb-bem-techs');
+
+module.exports = function(config) {
+    config.node('bundle', function(node) {
+        // получаем список файлов (FileList)
+        node.addTechs([
+            [FileProvideTech, { target: '?.bemdecl.js' }],
+            [bem.levels, levels: ['blocks']],
+            bem.deps,
+            bem.files
+        ]);
+
+        // Собираем CSS-файлы
+        node.addTechs([
+            [stylusTech],
+            [stylusTech, {
+                target: '?.ie6.css',
+                sourceSuffixes: [
+                    'styl', 'css',          // Общие стили
+                    'ie.styl', 'ie.css',    // Стили для IE < 9
+                    'ie6.styl', 'ie6.css'   // Стили для IE 6
+                ]
+            }]
+        ]);
+        node.addTargets(['?.css', '?.ie6.css']);
+    });
+};
+```
+
+Лицензия
+--------
+
+© 2014 YANDEX LLC. Код лицензирован [Mozilla Public License 2.0](LICENSE.txt).
