@@ -1,4 +1,4 @@
-# API технологии stylus
+# API технологии `stylus`
 
 Собирает исходные файлы блоков со стилями, написанными в синтаксисе Stylus (файлы с расширением `.styl`), или на чистом CSS (файлы с расширением `.css`).
 
@@ -12,12 +12,12 @@
 * [filesTarget](#filestarget)
 * [sourceSuffixes](#sourcesuffixes)
 * [url](#url)
-* [comments](#comments)
 * [imports](#imports)
 * [sourcemap](#sourcemap)
 * [autoprefixer](#autoprefixer)
-* [compress](#compress)
 * [prefix](#prefix)
+* [compress](#compress)
+* [comments](#comments)
 * [includes](#includes)
 * [useNib](#usenib)
 
@@ -85,23 +85,6 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
   }
   ```
 
-#### comments
-
-Тип: `Boolean`. По умолчанию: `true`.
-
-Обрамление комментариями CSS-кода в собранном файле. Комментарии cодержат относительный путь до исходного файла. Может быть использовано при разработке проекта.
-
-**Пример**
-
-```css
-/* ../../blocks/block/block.styl:begin */
-.block
-{
-    background-image: url(../../blocks/block/block.png);
-}
-/* ../../blocks/block/block.styl:end */
-```
-
 #### imports
 
 Тип: `String`. По умолчанию: `include`.
@@ -135,21 +118,15 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 - **true:** префиксы добавляются для самых актуальных версий браузеров на основании данных сервиса [caniuse.com](http://caniuse.com).
 - **browsers: String[]:** задание конфигурации в случае, если требуется передать точный список поддерживаемых браузеров.
 
- Пример:
+  **Пример**
 
- ```js
- {
-     autoprefixer: { browsers: ['Explorer 10', 'Opera 12'] }
- }
- ```
+  ```js
+  {
+      autoprefixer: { browsers: ['Explorer 10', 'Opera 12'] }
+  }
+  ```
 
- Подробнее в документации [autoprefixer](https://github.com/postcss/autoprefixer#browsers).
-
-#### compress
-
-Тип: `Boolean`. По умолчанию: `false`.
-
-Минификация CSS-кода. Поддерживает карты кода (sourcemap).
+  Подробнее в документации [autoprefixer](https://github.com/postcss/autoprefixer#browsers).
 
 #### prefix
 
@@ -158,6 +135,29 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 Добавление префикса для CSS-классов.
 
 **Важно!** Опция работает только для файлов с расширением `.styl`.
+
+#### compress
+
+Тип: `Boolean`. По умолчанию: `false`.
+
+Минификация CSS-кода. Поддерживает карты кода (sourcemap).
+
+#### comments
+
+Тип: `Boolean`. По умолчанию: `true`.
+
+Обрамление комментариями CSS-кода в собранном файле. Комментарии cодержат относительный путь до исходного файла. Может быть использовано при разработке проекта.
+
+**Пример**
+
+```css
+/* ../../blocks/block/block.styl:begin */
+.block
+{
+    background-image: url(../../blocks/block/block.png);
+}
+/* ../../blocks/block/block.styl:end */
+```
 
 #### includes
 
