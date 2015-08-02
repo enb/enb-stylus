@@ -44,14 +44,14 @@
     "enb": ">=0.8.43 <1.0.0"
   },
   "dependencies": {
-    "autoprefixer-core": "5.2.0",
+    "autoprefixer-core": "5.2.1",
     "csswring": "3.0.5",
     "nib": "1.1.0",
-    "postcss": "4.1.11",
-    "postcss-import": "5.2.2",
-    "postcss-url": "3.2.0",
+    "postcss": "4.1.16",
+    "postcss-import": "6.1.1",
+    "postcss-url": "4.0.0",
     "stylus": "0.52.0",
-    "vow": "0.4.9"
+    "vow": "0.4.10"
   },
   "devDependencies": {
     "bower": "1.4.1",
@@ -60,9 +60,9 @@
     "enb": ">=0.8.43 <1.0.0",
     "istanbul": "0.3.17",
     "jscs": "1.13.1",
-    "jshint": "2.7.0",
-    "mocha": "2.2.4",
-    "mock-enb": "0.0.2",
+    "jshint": "2.8.0",
+    "mocha": "2.2.5",
+    "mock-enb": "0.1.0",
     "mock-fs": "3.0.0",
     "must": "0.12.0"
   },
