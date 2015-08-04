@@ -48,7 +48,7 @@
     "csswring": "3.0.5",
     "nib": "1.1.0",
     "postcss": "4.1.16",
-    "postcss-import": "6.1.1",
+    "postcss-import": "6.2.0",
     "postcss-url": "4.0.0",
     "stylus": "0.52.0",
     "vow": "0.4.10"
