@@ -9,7 +9,19 @@ enb-stylus
 
 **Совместимость:** технология пакета `enb-stylus` поддерживает версию [CSS-препроцессора Stylus](https://github.com/stylus/stylus) `0.52.0`.
 
-## Работа технологии
+Обзор документа
+---------------
+
+* [Работа технологии `stylus`](#Работа-технологии-stylus)
+* [Как начать использовать?](#Как-начать-использовать)
+* [Особенности работы пакета](#Особенности-работы-пакета)
+  * [Совместное использование Stylus и CSS](#Совместное-использование-stylus-и-css)
+  * [Добавление вендорных префиксов](#Добавление-вендорных-префиксов)
+  * [Минимизация CSS-кода](#Минимизация-css-кода)
+  * [Сборка отдельного бандла для IE](#Сборка-отдельного-бандла-для-ie)
+
+Работа технологии `stylus`
+--------------------------
 
 В [БЭМ-методологии](https://ru.bem.info/method/filesystem/) стили к каждому блоку хранятся в отдельных файлах в директориях блоков.
 
@@ -17,7 +29,57 @@ ENB-технология `stylus` позволяет писать код как 
 
 В результате сборки вы получите CSS-файл. Для обработки итогового CSS используется CSS-построцессор [postcss](https://github.com/postcss/postcss).
 
-## Особенности работы пакета
+Как начать использовать?
+------------------------
+
+**1.** Установите пакет `enb-stylus`:
+
+```sh
+$ npm install --save-dev enb-stylus
+```
+
+**Требования:** зависимость от пакета `enb` версии `0.8.43` или выше.
+
+**2.** Опишите код стилей в файле с расширением `.styl`:
+```
+ blocks/
+ └── block/
+     └── block.styl
+```
+
+**3.** Добавьте в конфигурационный файл `.enb/make.js` следующий код:
+
+```js
+var stylusTech = require('enb-stylus/techs/stylus'),
+    FileProvideTech = require('enb/techs/file-provider'),
+    bem = require('enb-bem-techs');
+
+module.exports = function(config) {
+    config.node('bundle', function(node) {
+        // Получаем список файлов (FileList)
+        node.addTechs([
+            [FileProvideTech, { target: '?.bemdecl.js' }],
+            [bem.levels, levels: ['blocks']],
+            bem.deps,
+            bem.files
+        ]);
+
+        // Строим CSS-файл
+        node.addTech([stylusTech, {
+            // target: '?.css',
+            // filesTarget: '?.files',
+            // sourceSuffixes: ['.styl', '.css'],
+            // url: 'rebase'
+            // imports: 'include',
+            // comments: true
+        }]);
+        node.addTarget('?.css');
+    });
+};
+```
+
+Особенности работы пакета
+-------------------------
 
 ### Совместное использование Stylus и CSS
 
@@ -79,55 +141,19 @@ bundle
 @import "../desktop.blocks/block/block.css";
 ```
 
-## Как начать использовать?
+### Добавление вендорных префиксов
 
-**1.** Установите пакет `enb-stylus`:
+Технология `stylus` поддерживает [Autoprefixer](https://github.com/postcss/autoprefixer).
 
-```sh
-$ npm install --save-dev enb-stylus
-```
+Для автоматического добавления вендорных префиксов в процессе сборки используйте опцию [autoprefixer](api.ru.md#autoprefixer).
 
-**Требования:** зависимость от пакета `enb` версии `0.8.43` или выше.
+### Минимизация CSS-кода
 
-**2.** Опишите код стилей в файле с расширением `.styl`:
-```
- blocks/
- └── block/
-     └── block.styl
-```
+Для минимизации CSS-кода используется [csswring](https://github.com/hail2u/node-csswring).
 
-**3.** Добавьте в конфигурационный файл `.enb/make.js` следующий код:
+Включить минимизацию можно с помощью опцию [compress](api.ru.md#compress).
 
-```js
-var stylusTech = require('enb-stylus/techs/stylus'),
-    FileProvideTech = require('enb/techs/file-provider'),
-    bem = require('enb-bem-techs');
-
-module.exports = function(config) {
-    config.node('bundle', function(node) {
-        // Получаем список файлов (FileList)
-        node.addTechs([
-            [FileProvideTech, { target: '?.bemdecl.js' }],
-            [bem.levels, levels: ['blocks']],
-            bem.deps,
-            bem.files
-        ]);
-
-        // Строим CSS-файл
-        node.addTech([stylusTech, {
-            // target: '?.css',
-            // filesTarget: '?.files',
-            // sourceSuffixes: ['.styl', '.css'],
-            // url: 'rebase'
-            // imports: 'include',
-            // comments: true
-        }]);
-        node.addTarget('?.css');
-    });
-};
-```
-
-## Сборка отдельного бандла для IE
+### Сборка отдельного бандла для IE
 
 Если в проекте есть стили, которые должны примениться только для IE, то их помещают в отдельный файл со специальным расширением `.ie*.styl`:
 
