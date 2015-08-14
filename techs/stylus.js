@@ -311,7 +311,7 @@ module.exports = require('enb/lib/build-flow').create()
          * @returns {Promise}
          */
         _writeMap: function (filename, data) {
-            if (this._sourcemap && !this._sourcemap.inline) {
+            if (this._sourcemap && this._sourcemap !== 'inline') {
                 return vfs.write(filename, JSON.stringify(data));
             }
 
