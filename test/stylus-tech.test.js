@@ -309,7 +309,7 @@ describe('stylus-tech', function () {
                     '  color: #000;',
                     '}',
                     ['/* ..', 'blocks', 'block.styl:end */'].join(path.sep)
-                ].join('\n'); // Stylus \n for line break
+                ].join('\n'); // Stylus uses \n for line break
 
             return build(scheme, { comments: true }).then(function (actual) {
                 actual.must.contain(expected);
@@ -329,11 +329,9 @@ describe('stylus-tech', function () {
 
                 expected = [
                     ['/* ..', 'blocks', 'block.css:begin */'].join(path.sep),
-                    'body {',
-                    '  color: #000;',
-                    '}',
+                    scheme.blocks['block.css'],
                     ['/* ..', 'blocks', 'block.css:end */'].join(path.sep)
-                ].join(EOL);
+                ].join('\n'); // Stylus uses \n for line break
 
             return build(scheme, { comments: true }).then(function (actual) {
                 actual.must.contain(expected);
@@ -367,7 +365,7 @@ describe('stylus-tech', function () {
                     '  color: #fff;',
                     '}',
                     ['/* ..', 'blocks', 'block.ie.styl:end */'].join(path.sep)
-                ].join('\n'); // Stylus \n for line break
+                ].join('\n'); // Stylus uses \n for line break
 
             return build(scheme, { comments: true, sourceSuffixes: ['styl', 'css', 'ie.styl'] })
                 .then(function (actual) {
