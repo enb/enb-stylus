@@ -172,17 +172,12 @@ module.exports = require('enb/lib/build-flow').create()
                         pre = '',
                         post = '';
 
-                    if (file.suffix.indexOf('styl') !== -1) {
-                        if (this._comments) {
-                            pre = '/* ' + url + ':begin */' + EOL;
-                            post = '/* ' + url + ':end */' + EOL;
-                        }
-
-                        return pre + '@import "' + url + '";' + EOL + post;
+                    if (this._comments) {
+                        pre = '/* ' + url + ':begin */' + EOL;
+                        post = '/* ' + url + ':end */' + EOL;
                     }
 
-                    // postcss adds surrounding comments itself so don't add them here
-                    return '@import "' + url + '";' + EOL;
+                    return pre + '@import "' + url + '";' + EOL + post;
                 }, this).join(EOL);
         },
 
@@ -213,7 +208,8 @@ module.exports = require('enb/lib/build-flow').create()
             if (map) {
                 map = {
                     basePath: path.dirname(filename),
-                    inline: false
+                    inline: false,
+                    comment: false
                 };
             }
 
@@ -261,8 +257,7 @@ module.exports = require('enb/lib/build-flow').create()
          * @returns {Promise} – promise with processed css and sourcemap (options)
          */
         _processCss: function (filename, css, sourcemap) {
-            var _this = this,
-                processor = postcss(),
+            var processor = postcss(),
                 urlMethod = this._url,
 
                 // base opts to resolve urls
@@ -275,29 +270,14 @@ module.exports = require('enb/lib/build-flow').create()
             if (this._sourcemap) {
                 opts.map = {
                     prev: JSON.stringify(sourcemap),
-                    inline: this._sourcemap === 'inline'
+                    inline: this._sourcemap === 'inline',
+                    annotation: true
                 };
             }
 
             // expand imports with css
             if (this._imports === 'include') {
-                processor.use(atImport({
-                    transform: function (content, filename) {
-                        var url = _this.node.relativePath(filename),
-                            pre = '',
-                            post = '',
-                            res;
-
-                        if (_this._comments) {
-                            pre = '/* ' + url + ':begin */' + EOL;
-                            post = '/* ' + url + ':end */' + EOL;
-                        }
-
-                        res = pre + content + EOL + post;
-
-                        return res;
-                    }
-                }));
+                processor.use(atImport());
             }
 
             // rebase or inline urls in css
@@ -331,7 +311,7 @@ module.exports = require('enb/lib/build-flow').create()
          * @returns {Promise}
          */
         _writeMap: function (filename, data) {
-            if (this._sourcemap && !this._sourcemap.inline) {
+            if (this._sourcemap && this._sourcemap !== 'inline') {
                 return vfs.write(filename, JSON.stringify(data));
             }
 
