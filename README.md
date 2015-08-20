@@ -52,16 +52,16 @@ $ npm install --save-dev enb-stylus
 ```js
 var stylusTech = require('enb-stylus/techs/stylus'),
     FileProvideTech = require('enb/techs/file-provider'),
-    bem = require('enb-bem-techs');
+    bemTechs = require('enb-bem-techs');
 
 module.exports = function(config) {
     config.node('bundle', function(node) {
         // Получаем список файлов (FileList)
         node.addTechs([
             [FileProvideTech, { target: '?.bemdecl.js' }],
-            [bem.levels, levels: ['blocks']],
-            bem.deps,
-            bem.files
+            [bemTechs.levels, levels: ['blocks']],
+            bemTechs.deps,
+            bemTechs.files
         ]);
 
         // Строим CSS-файл
@@ -238,16 +238,16 @@ node.addTargets(['?.css', '?.ie.css']);
 ```js
 var stylusTech = require('enb-stylus/techs/stylus'),
     FileProvideTech = require('enb/techs/file-provider'),
-    bem = require('enb-bem-techs');
+    bemTechs = require('enb-bem-techs');
 
 module.exports = function(config) {
     config.node('bundle', function(node) {
         // получаем список файлов (FileList)
         node.addTechs([
             [FileProvideTech, { target: '?.bemdecl.js' }],
-            [bem.levels, levels: ['blocks']],
-            bem.deps,
-            bem.files
+            [bemTechs.levels, levels: ['blocks']],
+            bemTechs.deps,
+            bemTechs.files
         ]);
 
         // Собираем CSS-файлы
