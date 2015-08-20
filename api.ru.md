@@ -25,13 +25,13 @@
 
 Тип: `String`. По умолчанию: `?.css`.
 
-Имя таргета, куда будет записан результат сборки необходимых `.styl`- и `.css`-файлов проекта.
+Имя файла, куда будет записан результат сборки необходимых `.styl`- и `.css`-файлов проекта.
 
 #### filesTarget
 
 Тип: `String`. По умолчанию: `?.files`.
 
-Имя таргета, откуда будет доступен список исходных файлов для сборки. Список файлов предоставляет технология [files](https://ru.bem.info/tools/bem/enb-bem-techs/readme/#files) пакета [enb-bem-techs](https://ru.bem.info/tools/bem/enb-bem-techs/readme/).
+Имя таргета, откуда будет доступен список исходных файлов для сборки. Список файлов предоставляет технология [files](https://github.com/enb-bem/enb-bem-techs/blob/master/docs/api.ru.md/#files) пакета [enb-bem-techs](https://github.com/enb-bem/enb-bem-techs/blob/master/README.md).
 
 #### sourceSuffixes
 
@@ -180,19 +180,19 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 
 ## Пример использования технологии
 
-```javascript
+```js
 var stylusTech = require('enb-stylus/techs/stylus'),
     FileProvideTech = require('enb/techs/file-provider'),
-    bem = require('enb-bem-techs');
+    bemTechs = require('enb-bem-techs');
 
 module.exports = function(config) {
     config.node('bundle', function(node) {
         // Получаем имена файлов (FileList)
         node.addTechs([
             [FileProvideTech, { target: '?.bemdecl.js' }],
-            [bem.levels, levels: ['blocks']],
-            bem.deps,
-            bem.files
+            [bemTechs.levels, levels: ['blocks']],
+            bemTechs.deps,
+            bemTechs.files
         ]);
 
         // Создаем CSS-файлы
