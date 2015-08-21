@@ -41,7 +41,7 @@
     "Nickolay Ilchenko <tavriaforever@yandex.ru>"
   ],
   "peerDependencies": {
-    "enb": ">=0.8.43 <1.0.0"
+    "enb": ">=0.16.0 <1.0.0"
   },
   "dependencies": {
     "autoprefixer-core": "5.2.1",
@@ -57,7 +57,7 @@
     "bower": "1.4.1",
     "bower-npm-install": "0.5.9",
     "deep-extend": "0.4.0",
-    "enb": ">=0.8.43 <1.0.0",
+    "enb": ">=0.16.0 <1.0.0",
     "istanbul": "0.3.17",
     "jscs": "1.13.1",
     "jshint": "2.8.0",
