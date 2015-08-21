@@ -58,7 +58,7 @@
     "bower-npm-install": "0.5.9",
     "deep-extend": "0.4.0",
     "enb": ">=0.16.0 <1.0.0",
-    "istanbul": "0.3.17",
+    "istanbul": "0.3.18",
     "jscs": "1.13.1",
     "jshint": "2.8.0",
     "mocha": "2.2.5",
