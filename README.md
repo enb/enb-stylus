@@ -195,7 +195,7 @@ node.addTechs([
 node.addTargets(['?.css', '?.ie6.css']);
 ```
 
-**4.** В БЭМ проектах принято подключать стили через [Conditional Comments](https://msdn.microsoft.com/en-us/library/ms537512(v=vs.85).aspx).
+**4.** В БЭМ проектах принято подключать стили с помощью [условных комментариев](https://ru.wikipedia.org/wiki/Условный_комментарий).
 
 **Пример**
 
