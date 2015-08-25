@@ -151,7 +151,7 @@ bundle
 
 Для минимизации CSS-кода используется [csswring](https://github.com/hail2u/node-csswring).
 
-Включить минимизацию можно с помощью опцию [compress](api.ru.md#compress).
+Включить минимизацию можно с помощью опции [compress](api.ru.md#compress).
 
 ### Сборка отдельного бандла для IE
 
