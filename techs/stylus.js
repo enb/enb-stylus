@@ -80,7 +80,7 @@ var path = require('path'),
  *         // get FileList
  *         node.addTechs([
  *             [FileProvideTech, { target: '?.bemdecl.js' }],
- *             [bemTechs.levels, levels: ['blocks']],
+ *             [bemTechs.levels, { levels: ['blocks'] }],
  *             bemTechs.deps,
  *             bemTechs.files
  *         ]);
