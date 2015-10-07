@@ -1,6 +1,8 @@
 var path = require('path'),
     vow = require('vow'),
-    vfs = require('enb/lib/fs/async-fs'),
+    enb = require('enb'),
+    vfs = enb.asyncFS || require('enb/lib/fs/async-fs'),
+    buildFlow = enb.buildFlow || require('enb/lib/build-flow'),
     postcss = require('postcss'),
     atImport = require('postcss-import'),
     url = require('postcss-url'),
@@ -89,7 +91,7 @@ var path = require('path'),
  *     });
  * };
  */
-module.exports = require('enb/lib/build-flow').create()
+module.exports = buildFlow.create()
     .name('stylus')
     .target('target', '?.css')
     .defineOption('url', 'rebase')

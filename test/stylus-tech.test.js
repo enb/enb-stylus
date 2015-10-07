@@ -5,6 +5,7 @@ var fs = require('fs'),
     mockFsHelper = require(path.join(__dirname, 'lib', 'mock-fs-helper')),
     MockNode = require('mock-enb/lib/mock-node'),
     FileList = require('enb/lib/file-list'),
+    loadDirSync = require('mock-enb/utils/dir-utils').loadDirSync,
     StylusTech = require('../techs/stylus'),
     stylus = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'stylus')),
     nib = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'nib')),
@@ -423,7 +424,7 @@ function build (scheme, options) {
     var bundle = new MockNode('bundle'),
         fileList = new FileList();
 
-    fileList.loadFromDirSync('blocks');
+    fileList.addFiles(loadDirSync('blocks'));
     bundle.provideTechData('?.files', fileList);
 
     return bundle.runTechAndGetContent(StylusTech, commonOptions).spread(function (content) {
