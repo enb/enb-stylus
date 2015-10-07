@@ -1,6 +1,11 @@
 История изменений
 =================
 
+2.1.0
+-----
+
+* Добавлена поддержка `enb` версии `1.x` ([#109]).
+
 2.0.0
 -----
 
@@ -68,3 +73,4 @@
 [#71]: https://github.com/enb-make/enb-stylus/issues/71
 [#73]: https://github.com/enb-make/enb-stylus/issues/73
 [#90]: https://github.com/enb-make/enb-stylus/issues/90
+[#109]: https://github.com/enb-make/enb-stylus/pull/109
