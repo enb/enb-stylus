@@ -20,7 +20,9 @@
 * [comments](#comments)
 * [globals](#globals)
 * [includes](#includes)
+* [use](#use)
 * [useNib](#usenib)
+* [importPaths](#importPaths)
 
 #### target
 
@@ -175,11 +177,27 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 
 **Важно!** Опция работает только для файлов с расширением `.styl`.
 
+### use
+
+Тип: `Function | Function[]`. По умолчанию: `[]`.
+
+Подключение плагинов или одного плагина для Stylus [через use()](https://github.com/stylus/stylus/blob/dev/docs/js.md#usefn)
+
+**Важно!** Опция работает только для файлов с расширением `.styl`.
+
 ### useNib
 
 Тип: `Boolean`. По умолчанию: `false`.
 
 Подключение библиотеки CSS3-миксинов для Stylus – [nib](https://github.com/tj/nib).
+
+**Важно!** Опция работает только для файлов с расширением `.styl`.
+
+### importPaths
+
+Тип: `String[]`. По умолчанию: `[]`.
+
+Подключение `.styl` файлов или директорий c `index.styl` [через import()](https://github.com/stylus/stylus/blob/dev/docs/js.md#importpath)
 
 **Важно!** Опция работает только для файлов с расширением `.styl`.
 
@@ -190,6 +208,8 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 ```js
 var stylusTech = require('enb-stylus/techs/stylus'),
     FileProvideTech = require('enb/techs/file-provider'),
+    nib = require('nib'),
+    rupture = require('rupture'),
     bemTechs = require('enb-bem-techs');
 
 module.exports = function(config) {
@@ -203,7 +223,10 @@ module.exports = function(config) {
         ]);
 
         // Создаем CSS-файлы
-        node.addTech([stylusTech, { /* опции */ }]);
+        node.addTech([stylusTech, {
+            use: [nib(), rupture()],
+            importPaths: [nib.path + '/nib']
+        }]);
         node.addTarget('?.css');
     });
 };

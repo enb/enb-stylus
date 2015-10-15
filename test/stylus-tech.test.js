@@ -1,6 +1,7 @@
 var fs = require('fs'),
     path = require('path'),
     deepExtend = require('deep-extend'),
+    vow = require('vow'),
     mockFs = require('mock-fs'),
     mockFsHelper = require(path.join(__dirname, 'lib', 'mock-fs-helper')),
     MockNode = require('mock-enb/lib/mock-node'),
@@ -296,6 +297,43 @@ describe('stylus-tech', function () {
 
             return build(scheme, { useNib: true }).then(function (actual) {
                 actual.must.equal(expected);
+            });
+        });
+    });
+
+    describe('use', function () {
+        var nibPlugin = require('nib');
+
+        it('must use nib plugin as a part of plugins list', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': 'body { size: 5em 10em; }'
+                    }
+                },
+                expected = [
+                    'body{',
+                        'width:5em;',
+                        'height:10em;',
+                    '}'
+                ].join('');
+
+            return build(scheme, { use: [nibPlugin()] }).then(function (actual) {
+                actual.must.equal(expected);
+            });
+        });
+
+        it('must use single nib plugin identically as a part of plugins list', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': 'body { size: 5em 10em; }'
+                    }
+                };
+
+            return vow.all([
+                build(scheme, { use: nibPlugin() }),
+                build(scheme, { use: [nibPlugin()] })
+            ]).then(function (values) {
+                values[0].must.equal(values[1]);
             });
         });
     });
