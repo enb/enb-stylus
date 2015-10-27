@@ -53,6 +53,8 @@ var path = require('path'),
  * @param {Boolean}         [options.compress=false]                  Minifies styles. Supports sourcemap.
  * @param {String}          [options.prefix='']                       Adds prefix to CSS classes.<br/>
  *                                                                    Important: Available for Stylus only.
+ * @param {String[]}        [options.globals=[]]                      Imports `.styl` files with global variables,
+ *                                                                    functions and mixins to the top.
  * @param {String[]}        [options.includes=[]]                     Adds additional path to resolve a path in @import
  *                                                                    and url().<br/>
  *                                                                    [Stylus: include]{@link http://bit.ly/1IpsoTh}
@@ -102,6 +104,7 @@ module.exports = buildFlow.create()
     .defineOption('compress', false)
     .defineOption('prefix', '')
     .defineOption('includes', [])
+    .defineOption('globals', [])
     .defineOption('useNib', false)
     .useFileList(['styl', 'css'])
     .builder(function (sourceFiles) {
@@ -133,54 +136,62 @@ module.exports = buildFlow.create()
          */
         _prepareImports: function (sourceFiles) {
             var added = {},
-                node = this.node;
+                node = this.node,
+                nodeDir = node.getDir();
 
-            return sourceFiles
-                .filter(function (file) {
-                    /**
-                     * This code is used when block has a lot of files that include styles.
-                     *
-                     * Case #1:
-                     * blocks/
-                     * ├── block.styl
-                     * └── block.css
-                     * Will be used `.styl`
-                     *
-                     * Case #2:
-                     * blocks/
-                     * ├── block.styl
-                     * ├── block.ie.styl
-                     * └── block.css
-                     * Will be used `.styl` and `.ie.styl`
-                     *
-                     * Case #3:
-                     * blocks/
-                     * ├── block.css
-                     * ├── block.ie.css
-                     * Will be used `.css` and `.ie.css`
-                     */
-                    var basename = file.fullname.substring(0, file.fullname.lastIndexOf('.'));
+            // add global files to the top
+            return this._globals.map(function (filename) {
+                // imitate source files (FileList format)
+                return {
+                    // get absolute path to file
+                    fullname: path.resolve(nodeDir, filename)
+                };
+            // add source files after global files
+            }).concat(sourceFiles.filter(function (file) {
+                /**
+                 * This code is used when block has a lot of files that include styles.
+                 *
+                 * Case #1:
+                 * blocks/
+                 * ├── block.styl
+                 * └── block.css
+                 * Will be used `.styl`
+                 *
+                 * Case #2:
+                 * blocks/
+                 * ├── block.styl
+                 * ├── block.ie.styl
+                 * └── block.css
+                 * Will be used `.styl` and `.ie.styl`
+                 *
+                 * Case #3:
+                 * blocks/
+                 * ├── block.css
+                 * ├── block.ie.css
+                 * Will be used `.css` and `.ie.css`
+                 */
+                var basename = file.fullname.substring(0, file.fullname.lastIndexOf('.'));
 
-                    if (added[basename]) {
-                        return false;
-                    }
+                if (added[basename]) {
+                    return false;
+                }
 
-                    added[basename] = true;
+                added[basename] = true;
 
-                    return true;
-                })
-                .map(function (file) {
-                    var url = node.relativePath(file.fullname),
-                        pre = '',
-                        post = '';
+                return true;
+            // convert array with filenames to string with `@import` list
+            })).map(function (file) {
+                var url = node.relativePath(file.fullname),
+                    pre = '',
+                    post = '';
 
-                    if (this._comments) {
-                        pre = '/* ' + url + ':begin */' + EOL;
-                        post = '/* ' + url + ':end */' + EOL;
-                    }
+                if (this._comments) {
+                    pre = '/* ' + url + ':begin */' + EOL;
+                    post = '/* ' + url + ':end */' + EOL;
+                }
 
-                    return pre + '@import "' + url + '";' + EOL + post;
-                }, this).join(EOL);
+                return pre + '@import "' + url + '";' + EOL + post;
+            }, this).join(EOL);
         },
 
         /**

@@ -161,6 +161,38 @@ describe('stylus-tech', function () {
         });
     });
 
+    describe('globals', function () {
+        it('must import global file by relative path', function () {
+            var scheme = {
+                blocks: {
+                    'file.styl': '.col { width: $col-width; }'
+                },
+                globals: {
+                    'vars.styl': '$col-width = 30px'
+                }
+            };
+
+            return build(scheme, { globals: ['../globals/vars.styl'] }).then(function (actual) {
+                actual.must.equal('.col{width:30px;}');
+            });
+        });
+
+        it('must import global file by absolute path', function () {
+            var scheme = {
+                blocks: {
+                    'file.styl': '.col { width: $col-width; }'
+                },
+                globals: {
+                    'vars.styl': '$col-width = 30px'
+                }
+            };
+
+            return build(scheme, { globals: [path.resolve('./globals/vars.styl')] }).then(function (actual) {
+                actual.must.equal('.col{width:30px;}');
+            });
+        });
+    });
+
     describe('autoprefixer', function () {
         it('must add vendor prefixes from browserlist', function () {
             var scheme = {
