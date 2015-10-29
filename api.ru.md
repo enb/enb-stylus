@@ -18,6 +18,7 @@
 * [prefix](#prefix)
 * [compress](#compress)
 * [comments](#comments)
+* [globals](#globals)
 * [includes](#includes)
 * [useNib](#usenib)
 
@@ -158,6 +159,12 @@ Oбработка `url()` внутри файлов `.styl` и `.css`.
 }
 /* ../../blocks/block/block.styl:end */
 ```
+
+#### globals
+
+Тип: `String | String[]`. По умолчанию: `[]`.
+
+Подключает `.styl`-файлы с глобальными переменными, методами или миксинами в начало.
 
 #### includes
 
