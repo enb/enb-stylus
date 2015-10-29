@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "autoprefixer": "6.0.3",
-    "csswring": "3.0.5",
+    "csswring": "4.0.0",
     "nib": "1.1.0",
     "postcss": "5.0.10",
     "postcss-import": "7.1.0",
