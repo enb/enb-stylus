@@ -44,7 +44,7 @@
     "enb": ">=0.16.0 <2.0.0"
   },
   "dependencies": {
-    "autoprefixer-core": "5.2.1",
+    "autoprefixer": "6.0.3",
     "csswring": "3.0.5",
     "nib": "1.1.0",
     "postcss": "5.0.10",
