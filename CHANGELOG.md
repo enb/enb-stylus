@@ -1,6 +1,21 @@
 История изменений
 =================
 
+2.2.0
+-----
+
+### Опции
+
+* Добавлена опция [globals](api.ru.md#globals) ([#113]).
+
+### Зависимости
+
+* Модуль `postcss@4.1.16` обновлен до версии `5.0.10` ([#116]).
+* Модуль `postcss-import@6.2.0` обновлен до версии `7.1.0` ([#116]).
+* Модуль `postcss-url@4.0.1` обновлен до версии `5.0.2` ([#116]).
+* Модуль `csswring@3.0.5` обновлен до версии `4.0.0` ([#116]).
+* Вместо модуля `autoprefixer-core@5.2.1` используется `autoprefixer@6.0.3` ([#116]).
+
 2.1.0
 -----
 
@@ -74,3 +89,5 @@
 [#73]: https://github.com/enb-make/enb-stylus/issues/73
 [#90]: https://github.com/enb-make/enb-stylus/issues/90
 [#109]: https://github.com/enb-make/enb-stylus/pull/109
+[#113]: https://github.com/enb-make/enb-stylus/issues/113
+[#116]: https://github.com/enb-make/enb-stylus/pull/116
