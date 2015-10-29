@@ -1,3 +1,6 @@
+// Support node 0.10: `postcss` uses promises
+require('es6-promise').polyfill();
+
 var path = require('path'),
     vow = require('vow'),
     enb = require('enb'),
@@ -7,7 +10,7 @@ var path = require('path'),
     atImport = require('postcss-import'),
     url = require('postcss-url'),
     stylus = require('stylus'),
-    autoprefixer = require('autoprefixer-core'),
+    autoprefixer = require('autoprefixer'),
     nib = require('nib'),
     EOL = require('os').EOL,
     csswring = require('csswring');
