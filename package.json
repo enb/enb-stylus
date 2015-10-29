@@ -46,6 +46,7 @@
   "dependencies": {
     "autoprefixer": "6.0.3",
     "csswring": "4.0.0",
+    "es6-promise": "3.0.2",
     "nib": "1.1.0",
     "postcss": "5.0.10",
     "postcss-import": "7.1.0",

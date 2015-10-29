@@ -1,3 +1,6 @@
+// Support node 0.10: `postcss` uses promises
+require('es6-promise').polyfill();
+
 var path = require('path'),
     vow = require('vow'),
     enb = require('enb'),
