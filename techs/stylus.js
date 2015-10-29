@@ -5,6 +5,7 @@ var path = require('path'),
     vow = require('vow'),
     enb = require('enb'),
     vfs = enb.asyncFS || require('enb/lib/fs/async-fs'),
+    FileList = enb.FileList || require('enb/lib/file-list'),
     buildFlow = enb.buildFlow || require('enb/lib/build-flow'),
     postcss = require('postcss'),
     atImport = require('postcss-import'),
@@ -110,6 +111,14 @@ module.exports = buildFlow.create()
     .defineOption('globals', [])
     .defineOption('useNib', false)
     .useFileList(['styl', 'css'])
+    .saveCache(function (cache) {
+        cache.cacheFileList(this._globalFiles);
+    })
+    .needRebuild(function (cache) {
+        this._globalFiles = this._filenamesToFileList(this._globals);
+
+        return cache.needRebuildFileList(this._globalFiles);
+    })
     .builder(function (sourceFiles) {
         var node = this.node,
             filename = node.resolvePath(path.basename(this._target)),
@@ -140,10 +149,9 @@ module.exports = buildFlow.create()
                 nodeDir = node.getDir();
 
             return filenames.map(function (filename) {
-                return {
-                    // get absolute path to file
-                    fullname: path.resolve(nodeDir, filename)
-                };
+                var absolutePath = path.resolve(nodeDir, filename);
+
+                return FileList.getFileInfo(absolutePath);
             });
         },
 
@@ -226,7 +234,7 @@ module.exports = buildFlow.create()
         _prepareImports: function (sourceFiles) {
             return this._composeImports([].concat(
                 // add global files to the top
-                this._filenamesToFileList(this._globals),
+                this._globalFiles,
                 // add source files after global files
                 this._filterSourceFiles(sourceFiles)
             ));
