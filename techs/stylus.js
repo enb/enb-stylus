@@ -125,51 +125,57 @@ module.exports = buildFlow.create()
     })
 
     .methods(/** @lends StylusTech.prototype */{
-
         /**
-         * Prepares the list of @import sources.
+         * Imitates source files (FileList format).
          *
-         * @private
-         * @param {Array} sourceFiles – paths to the files that contain styles for processing
+         * @param {String[]} filenames — paths to files
          * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
-         * @returns {String} – list of @import
+         * @returns {FileList}
          */
-        _prepareImports: function (sourceFiles) {
-            var added = {},
-                node = this.node,
+        _filenamesToFileList: function (filenames) {
+            var node = this.node,
                 nodeDir = node.getDir();
 
-            // add global files to the top
-            return this._globals.map(function (filename) {
-                // imitate source files (FileList format)
+            return filenames.map(function (filename) {
                 return {
                     // get absolute path to file
                     fullname: path.resolve(nodeDir, filename)
                 };
-            // add source files after global files
-            }).concat(sourceFiles.filter(function (file) {
-                /**
-                 * This code is used when block has a lot of files that include styles.
-                 *
-                 * Case #1:
-                 * blocks/
-                 * ├── block.styl
-                 * └── block.css
-                 * Will be used `.styl`
-                 *
-                 * Case #2:
-                 * blocks/
-                 * ├── block.styl
-                 * ├── block.ie.styl
-                 * └── block.css
-                 * Will be used `.styl` and `.ie.styl`
-                 *
-                 * Case #3:
-                 * blocks/
-                 * ├── block.css
-                 * ├── block.ie.css
-                 * Will be used `.css` and `.ie.css`
-                 */
+            });
+        },
+
+        /**
+         * Filters source files.
+         *
+         * This is necessary when block has a lot of files that include styles.
+         *
+         * Case #1:
+         * blocks/
+         * ├── block.styl
+         * └── block.css
+         * Will be used `.styl`
+         *
+         * Case #2:
+         * blocks/
+         * ├── block.styl
+         * ├── block.ie.styl
+         * └── block.css
+         * Will be used `.styl` and `.ie.styl`
+         *
+         * Case #3:
+         * blocks/
+         * ├── block.css
+         * ├── block.ie.css
+         * Will be used `.css` and `.ie.css`
+         *
+         * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
+         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @returns {FileList}
+         */
+        _filterSourceFiles: function (sourceFiles) {
+            var added = {};
+
+            return sourceFiles.filter(function (file) {
                 var basename = file.fullname.substring(0, file.fullname.lastIndexOf('.'));
 
                 if (added[basename]) {
@@ -179,8 +185,20 @@ module.exports = buildFlow.create()
                 added[basename] = true;
 
                 return true;
-            // convert array with filenames to string with `@import` list
-            })).map(function (file) {
+            });
+        },
+
+        /**
+         * Returns CSS code with imports to specified files.
+         *
+         * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
+         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @returns {String}
+         */
+        _composeImports: function (sourceFiles) {
+            var node = this.node;
+
+            return sourceFiles.map(function (file) {
                 var url = node.relativePath(file.fullname),
                     pre = '',
                     post = '';
@@ -192,6 +210,23 @@ module.exports = buildFlow.create()
 
                 return pre + '@import "' + url + '";' + EOL + post;
             }, this).join(EOL);
+        },
+
+        /**
+         * Prepares the list of @import sources.
+         *
+         * @private
+         * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
+         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @returns {String} – list of @import
+         */
+        _prepareImports: function (sourceFiles) {
+            return this._composeImports([].concat(
+                // add global files to the top
+                this._filenamesToFileList(this._globals),
+                // add source files after global files
+                this._filterSourceFiles(sourceFiles)
+            ));
         },
 
         /**
