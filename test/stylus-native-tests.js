@@ -13,6 +13,9 @@ var fs = require('fs'),
     casesMock = mockFsHelper.duplicateFSInMemory(path.join(stylusDir, 'cases')),
     imagesMock = mockFsHelper.duplicateFSInMemory(path.join(stylusDir, 'images')),
     stylus = mockFsHelper.duplicateFSInMemory(path.join(__dirname, 'fixtures', 'stylus')),
+    postcss = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'postcss')),
+    postcssImport = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'postcss-import')),
+    postcssUrl = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'postcss-url')),
     stylusCasesIgnores = [
         // File is`t included in the test cases
         'index',
@@ -66,7 +69,10 @@ addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) 
             images: imagesMock,
             // jscs:disable
             node_modules: {
-                stylus: stylus
+                stylus: stylus,
+                postcss: postcss,
+                'postcss-import': postcssImport,
+                'postcss-url': postcssUrl
             }
             // jscs:enable
         };

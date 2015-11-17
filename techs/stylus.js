@@ -7,14 +7,7 @@ var path = require('path'),
     vfs = enb.asyncFS || require('enb/lib/fs/async-fs'),
     FileList = enb.FileList || require('enb/lib/file-list'),
     buildFlow = enb.buildFlow || require('enb/lib/build-flow'),
-    postcss = require('postcss'),
-    atImport = require('postcss-import'),
-    url = require('postcss-url'),
-    stylus = require('stylus'),
-    autoprefixer = require('autoprefixer'),
-    nib = require('nib'),
-    EOL = require('os').EOL,
-    csswring = require('csswring');
+    EOL = require('os').EOL;
 
 /**
  * @class StylusTech
@@ -272,6 +265,8 @@ module.exports = buildFlow.create()
                 };
             }
 
+            var stylus = require('stylus');
+
             var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
@@ -292,6 +287,7 @@ module.exports = buildFlow.create()
             }
 
             if (this._useNib) {
+                var nib = require('nib');
                 renderer
                     .use(nib())
                     .import(nib.path + '/nib');
@@ -316,7 +312,7 @@ module.exports = buildFlow.create()
          * @returns {Promise} – promise with processed css and sourcemap (options)
          */
         _processCss: function (filename, css, sourcemap) {
-            var processor = postcss(),
+            var processor = require('postcss')(),
                 urlMethod = this._url,
 
                 // base opts to resolve urls
@@ -336,16 +332,17 @@ module.exports = buildFlow.create()
 
             // expand imports with css
             if (this._imports === 'include') {
-                processor.use(atImport());
+                processor.use(require('postcss-import')());
             }
 
             // rebase or inline urls in css
             if (['rebase', 'inline'].indexOf(urlMethod) > -1) {
-                processor.use(url({ url: urlMethod }));
+                processor.use(require('postcss-url')({ url: urlMethod }));
             }
 
             // use autoprefixer
             if (this._autoprefixer) {
+                var autoprefixer = require('autoprefixer');
                 processor.use(
                     (this._autoprefixer.browsers ?
                         autoprefixer({ browsers: this._autoprefixer.browsers }) :
@@ -355,7 +352,7 @@ module.exports = buildFlow.create()
 
             // compress css
             if (this._compress) {
-                processor.use(csswring());
+                processor.use(require('csswring')());
             }
 
             return processor.process(css, opts);
