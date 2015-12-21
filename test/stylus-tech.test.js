@@ -8,7 +8,10 @@ var fs = require('fs'),
     loadDirSync = require('mock-enb/utils/dir-utils').loadDirSync,
     StylusTech = require('../techs/stylus'),
     stylus = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'stylus')),
+    csswring = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'csswring')),
+    postcss = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'postcss')),
     nib = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'nib')),
+    autoprefixer = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'autoprefixer')),
     EOL = require('os').EOL;
 
 describe('stylus-tech', function () {
@@ -444,7 +447,10 @@ function build (scheme, options) {
             // jscs:disable
             node_modules: {
                 stylus: stylus,
-                nib: nib
+                nib: nib,
+                autoprefixer: autoprefixer,
+                csswring: csswring,
+                postcss: postcss
             }
             // jscs:enable
         },
