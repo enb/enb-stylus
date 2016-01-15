@@ -52,11 +52,13 @@ var path = require('path'),
  *                                                                    Important: Available for Stylus only.
  * @param {String[]}        [options.globals=[]]                      Imports `.styl` files with global variables,
  *                                                                    functions and mixins to the top.
+ * @param {String[]}        [options.importPaths=[]]                  Adds additional path to import
  * @param {String[]}        [options.includes=[]]                     Adds additional path to resolve a path in @import
  *                                                                    and url().<br/>
  *                                                                    [Stylus: include]{@link http://bit.ly/1IpsoTh}
  *                                                                    <br/>
  *                                                                    Important: Available for Stylus only.
+ * @param {Function[]}      [options.use=[]]                          Allows to use plugins for Stylus.<br/>
  * @param {Boolean}         [options.useNib=false]                    Allows to use Nib library for Stylus.<br/>
  *                                                                    Important: Available for Stylus only.
  *
@@ -100,9 +102,11 @@ module.exports = buildFlow.create()
     .defineOption('autoprefixer', false)
     .defineOption('compress', false)
     .defineOption('prefix', '')
+    .defineOption('importPaths', [])
     .defineOption('includes', [])
     .defineOption('globals', [])
     .defineOption('useNib', false)
+    .defineOption('use', [])
     .useFileList(['styl', 'css'])
     .saveCache(function (cache) {
         cache.cacheFileList(this._globalFiles);
@@ -286,12 +290,24 @@ module.exports = buildFlow.create()
                 });
             }
 
+            if (!Array.isArray(this._use)) {
+                this._use = [this._use];
+            }
+
             if (this._useNib) {
                 var nib = require('nib');
-                renderer
-                    .use(nib())
-                    .import(nib.path + '/nib');
+
+                this._use.push(nib());
+                this._importPaths.push(path.join(nib.path, 'nib'));
             }
+
+            this._use.forEach(function (func) {
+               renderer.use(func);
+            });
+
+            this._importPaths.forEach(function (path) {
+                renderer.import(path);
+            });
 
             var defer = vow.defer();
 
