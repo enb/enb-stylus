@@ -109,12 +109,12 @@ module.exports = buildFlow.create()
     .defineOption('use', [])
     .useFileList(['styl', 'css'])
     .saveCache(function (cache) {
-        cache.cacheFileList(this._globalFiles);
+        cache.cacheFileList('global', this._globalFiles);
     })
     .needRebuild(function (cache) {
         this._globalFiles = this._filenamesToFileList(this._globals);
 
-        return cache.needRebuildFileList(this._globalFiles);
+        return cache.needRebuildFileList('global', this._globalFiles);
     })
     .builder(function (sourceFiles) {
         var node = this.node,
