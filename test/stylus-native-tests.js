@@ -56,7 +56,9 @@ var fs = require('fs'),
         // Does not work when disclosure @import
         'bifs.selector.exitsts',
         'introspection',
-        'media.complex'
+        'media.complex',
+        'object.complex',
+        'supports'
     ];
 
 addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) {
