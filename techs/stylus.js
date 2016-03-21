@@ -138,7 +138,7 @@ module.exports = buildFlow.create()
          * Imitates source files (FileList format).
          *
          * @param {String[]} filenames — paths to files
-         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @see [FileList]{@link https://github.com/enb/enb/blob/master/lib/file-list.js}
          * @returns {FileList}
          */
         _filenamesToFileList: function (filenames) {
@@ -177,7 +177,7 @@ module.exports = buildFlow.create()
          * Will be used `.css` and `.ie.css`
          *
          * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
-         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @see [FileList]{@link https://github.com/enb/enb/blob/master/lib/file-list.js}
          * @returns {FileList}
          */
         _filterSourceFiles: function (sourceFiles) {
@@ -200,7 +200,7 @@ module.exports = buildFlow.create()
          * Returns CSS code with imports to specified files.
          *
          * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
-         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @see [FileList]{@link https://github.com/enb/enb/blob/master/lib/file-list.js}
          * @returns {String}
          */
         _composeImports: function (sourceFiles) {
@@ -225,7 +225,7 @@ module.exports = buildFlow.create()
          *
          * @private
          * @param {FileList} sourceFiles — Objects with paths to the files that contain styles for processing.
-         * @see [FileList]{@link https://github.com/enb-make/enb/blob/master/lib/file-list.js}
+         * @see [FileList]{@link https://github.com/enb/enb/blob/master/lib/file-list.js}
          * @returns {String} – list of @import
          */
         _prepareImports: function (sourceFiles) {

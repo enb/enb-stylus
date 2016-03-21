@@ -1,7 +1,7 @@
 enb-stylus
 ==========
 
-[![NPM version](http://img.shields.io/npm/v/enb-stylus.svg?style=flat)](http://www.npmjs.org/package/enb-stylus) [![Build Status](http://img.shields.io/travis/enb-make/enb-stylus/master.svg?style=flat&label=tests)](https://travis-ci.org/enb-make/enb-stylus) [![Build status](https://img.shields.io/appveyor/ci/blond/enb-stylus.svg?style=flat&label=windows)](https://ci.appveyor.com/project/blond/enb-stylus) [![Coverage Status](https://img.shields.io/coveralls/enb-make/enb-stylus.svg?style=flat)](https://coveralls.io/r/enb-make/enb-stylus?branch=master) [![Dependency Status](http://img.shields.io/david/enb-make/enb-stylus.svg?style=flat)](https://david-dm.org/enb-make/enb-stylus)
+[![NPM version](http://img.shields.io/npm/v/enb-stylus.svg?style=flat)](http://www.npmjs.org/package/enb-stylus) [![Build Status](http://img.shields.io/travis/enb/enb-stylus/master.svg?style=flat&label=tests)](https://travis-ci.org/enb/enb-stylus) [![Build status](https://img.shields.io/appveyor/ci/blond/enb-stylus.svg?style=flat&label=windows)](https://ci.appveyor.com/project/blond/enb-stylus) [![Coverage Status](https://img.shields.io/coveralls/enb/enb-stylus.svg?style=flat)](https://coveralls.io/r/enb/enb-stylus?branch=master) [![Dependency Status](http://img.shields.io/david/enb/enb-stylus.svg?style=flat)](https://david-dm.org/enb/enb-stylus)
 
 Пакет предоставляет [ENB](https://ru.bem.info/tools/bem/enb-bem/)-технологию для сборки CSS- и Stylus-файлов в проектах, построенных по [методологии БЭМ](https://ru.bem.info/method/).
 
