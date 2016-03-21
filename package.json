@@ -55,16 +55,16 @@
     "vow": "0.4.11"
   },
   "devDependencies": {
-    "bower": "1.6.9",
+    "bower": "1.7.7",
     "bower-npm-install": "0.5.10",
-    "deep-extend": "0.4.0",
+    "deep-extend": "0.4.1",
     "enb": ">=0.16.0 <2.0.0",
-    "istanbul": "0.4.1",
-    "jscs": "1.13.1",
-    "jshint": "2.8.0",
-    "mocha": "2.3.4",
-    "mock-enb": "0.3.0",
-    "mock-fs": "3.5.0",
+    "istanbul": "0.4.2",
+    "jscs": "2.11.0",
+    "jshint": "2.9.1",
+    "mocha": "2.4.5",
+    "mock-enb": "0.3.1",
+    "mock-fs": "3.8.0",
     "must": "0.13.1"
   },
   "scripts": {
