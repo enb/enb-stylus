@@ -1,6 +1,29 @@
 История изменений
 =================
 
+2.3.0
+-----
+
+### Опции
+
+* Добавлена опция [use](./api.ru.md#use) ([#111]).
+* Добавлена опция [importPaths](./api.ru.md#importpaths) ([#111]).
+
+### Зависимости
+
+* Модуль `autoprefixer@6.0.3` обновлен до версии `6.3.4`.
+* Модуль `csswring@4.0.0` обновлен до версии `4.2.2`.
+* Модуль `es6-promise@3.0.2` обновлен до версии `3.1.2`.
+* Модуль `postcss@5.0.10` обновлен до версии `5.0.19`.
+* Модуль `postcss-import@7.1.0` обновлен до версии `8.0.2`.
+* Модуль `postcss-url@5.0.2` обновлен до версии `5.1.1`.
+* Модуль `stylus@0.52.0` обновлен до версии `0.54.2`.
+* Модуль `vow@0.4.10` обновлен до версии `0.4.12`.
+
+### Остальное
+
+* Уменьшено время подключения технологий ([#120]).
+
 2.2.0
 -----
 
@@ -89,5 +112,7 @@
 [#73]: https://github.com/enb/enb-stylus/issues/73
 [#90]: https://github.com/enb/enb-stylus/issues/90
 [#109]: https://github.com/enb/enb-stylus/pull/109
+[#111]: https://github.com/enb/enb-stylus/pull/111
 [#113]: https://github.com/enb/enb-stylus/issues/113
 [#116]: https://github.com/enb/enb-stylus/pull/116
+[#120]: https://github.com/enb/enb-stylus/pull/120
