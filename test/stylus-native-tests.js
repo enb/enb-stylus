@@ -58,7 +58,11 @@ var fs = require('fs'),
         'introspection',
         'media.complex',
         'object.complex',
-        'supports'
+        'supports',
+
+        // Does not work in NodeJS 4
+        'bifs.use',
+        'import.lookup'
     ];
 
 addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) {
