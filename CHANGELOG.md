@@ -1,6 +1,13 @@
 История изменений
 =================
 
+2.3.2
+-----
+
+### Исправления ошибок
+
+* Исправлена опция [autoprefixer](./api.ru.md#autoprefixer) ([#125]).
+
 2.3.1
 -----
 
@@ -128,3 +135,4 @@
 [#113]: https://github.com/enb/enb-stylus/issues/113
 [#116]: https://github.com/enb/enb-stylus/pull/116
 [#120]: https://github.com/enb/enb-stylus/pull/120
+[#125]: https://github.com/enb/enb-stylus/pull/125
