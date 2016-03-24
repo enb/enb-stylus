@@ -360,8 +360,8 @@ module.exports = buildFlow.create()
             if (this._autoprefixer) {
                 var autoprefixer = require('autoprefixer');
                 processor.use(
-                    (this._autoprefixer.browsers ?
-                        autoprefixer({ browsers: this._autoprefixer.browsers }) :
+                    (typeof this._autoprefixer === 'object' ?
+                        autoprefixer(this._autoprefixer) :
                         autoprefixer)
                 );
             }
