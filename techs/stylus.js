@@ -285,8 +285,8 @@ module.exports = buildFlow.create()
             }
 
             if (this._includes) {
-                this._includes.forEach(function (path) {
-                    renderer.include(path);
+                this._includes.forEach(function (includePath) {
+                    renderer.include(includePath);
                 });
             }
 
@@ -305,8 +305,8 @@ module.exports = buildFlow.create()
                renderer.use(func);
             });
 
-            this._importPaths.forEach(function (path) {
-                renderer.import(path);
+            this._importPaths.forEach(function (importPath) {
+                renderer.import(importPath);
             });
 
             var defer = vow.defer();

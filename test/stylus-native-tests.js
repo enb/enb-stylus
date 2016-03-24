@@ -120,10 +120,10 @@ addSuite('cases', readDir(stylusDir + '/cases', '.styl'), function (test, done) 
 
 /**
  * Helper for generating test by passed arguments
- * @param {String} desc
- * @param {Array} cases
- * @param {Function} fn
- * @param {Array} ignores
+ * @param {String} desc - description
+ * @param {String[]} cases - case names
+ * @param {Function} fn - callback
+ * @param {String[]} ignores — case names to ignore
  */
 function addSuite(desc, cases, fn, ignores) {
     describe(desc, function () {
@@ -143,7 +143,7 @@ function addSuite(desc, cases, fn, ignores) {
 /**
  * Helper for reading and filter files in passed dir by extensions
  * @param {String} dir - dir filename
- * @param {String} ext
+ * @param {String} ext - extention
  * @returns {*}
  */
 function readDir(dir, ext) {
