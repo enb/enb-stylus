@@ -76,5 +76,7 @@ module.exports = {
             .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
             .replace(/(\/\*([\s\S]*?)\*\/)|(\/\/(.*)$)/gm, '') // spaces
             .trim();
-    }
+    },
+
+    readFile: readFile
 };
