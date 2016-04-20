@@ -1,7 +1,8 @@
 // Support node 0.10: `postcss` uses promises
 require('es6-promise').polyfill();
 
-var path = require('path'),
+var _ = require('lodash'),
+    path = require('path'),
     vow = require('vow'),
     enb = require('enb'),
     vfs = enb.asyncFS || require('enb/lib/fs/async-fs'),
@@ -119,18 +120,39 @@ module.exports = buildFlow.create()
     .builder(function (sourceFiles) {
         var node = this.node,
             filename = node.resolvePath(path.basename(this._target)),
-            stylesImports = this._prepareImports(sourceFiles);
+            fileCache = node.getSharedResources().fileCache;
 
-        return this._processStylus(filename, stylesImports)
-            .spread(function (css, sourcemap) {
-                return this._processCss(filename, css, sourcemap);
-            }, this)
-            .then(function (result) {
-                return this._writeMap(filename + '.map', result.map)
-                    .then(function () {
-                        return result.css;
-                    });
-            }, this);
+        return _(sourceFiles)
+            .map(function (sourceFile) {
+                var cacheKey = sourceFile.fullname + '.stylus.css';
+                return fileCache.get(cacheKey, sourceFile.mtime)
+                    .then(function (content) {
+                        if (content !== null) {
+                            console.log('**** Using %s from cache', cacheKey);
+                            return content;
+                        }
+
+                        var stylesImports = this._prepareImports([sourceFile]);
+                        return this._processStylus(filename, stylesImports)
+                            .spread(function (css, sourcemap) {
+                                return this._processCss(filename, css, sourcemap);
+                            }, this)
+                            .then(function (result) {
+                                return fileCache.put(cacheKey, result)
+                                    .then(function () {
+                                        return result;
+                                    });
+                            });
+                    }, this);
+            }.bind(this))
+            .thru(vow.all)
+            .value()
+            .then(function (results) {
+                // TODO: merge source maps
+                // TODO: save source maps
+                //return this._writeMap(filename + '.map', result.map)
+                return _.map(results, 'css').join(EOL);
+            });
     })
 
     .methods(/** @lends StylusTech.prototype */{
@@ -271,6 +293,7 @@ module.exports = buildFlow.create()
 
             var stylus = require('stylus');
 
+            console.time('stylus init');
             var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
@@ -308,6 +331,7 @@ module.exports = buildFlow.create()
             this._importPaths.forEach(function (importPath) {
                 renderer.import(importPath);
             });
+            console.timeEnd('stylus init');
 
             var defer = vow.defer();
 

@@ -47,6 +47,7 @@
     "autoprefixer": "6.3.4",
     "csswring": "4.2.2",
     "es6-promise": "3.1.2",
+    "lodash": "^4.7.0",
     "nib": "1.1.0",
     "postcss": "5.0.19",
     "postcss-import": "7.1.3",
