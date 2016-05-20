@@ -213,7 +213,6 @@ describe('stylus-tech', function () {
                     'body{',
                         'color:#000;',
                         'display:-webkit-box;',
-                        'display:-webkit-flex;',
                         'display:-ms-flexbox;',
                         'display:flex;',
                     '}'
