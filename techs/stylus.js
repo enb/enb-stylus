@@ -96,6 +96,7 @@ module.exports = buildFlow.create()
     .name('stylus')
     .target('target', '?.css')
     .defineOption('url', 'rebase')
+    .defineOption('inlineMaxSize', 14)
     .defineOption('comments', true)
     .defineOption('imports', 'include')
     .defineOption('sourcemap', false)
@@ -353,7 +354,7 @@ module.exports = buildFlow.create()
 
             // rebase or inline urls in css
             if (['rebase', 'inline'].indexOf(urlMethod) > -1) {
-                processor.use(require('postcss-url')({ url: urlMethod }));
+                processor.use(require('postcss-url')({ url: urlMethod, maxSize: this._inlineMaxSize }));
             }
 
             // use autoprefixer
