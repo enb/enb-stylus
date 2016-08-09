@@ -23,7 +23,7 @@
 * [use](#use)
 * [useNib](#usenib)
 * [importPaths](#importPaths)
-* [inlineMaxSize](#inlineMaxSize)
+* [inlineMaxSize](#inlinemaxsize)
 
 #### target
 
