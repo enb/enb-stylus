@@ -55,18 +55,18 @@
     "vow": "0.4.12"
   },
   "devDependencies": {
-    "bower": "1.7.9",
-    "bower-npm-install": "0.5.11",
-    "deep-extend": "0.4.1",
+    "bower": "^1.7.9",
+    "bower-npm-install": "^0.5.11",
+    "deep-extend": "^0.4.1",
     "enb": ">=0.16.0 <2.0.0",
     "eslint": "^3.2.2",
     "eslint-config-pedant": "^0.7.0",
-    "istanbul": "0.4.4",
-    "jscs": "3.0.7",
-    "mocha": "3.0.2",
-    "mock-enb": "0.3.2",
-    "mock-fs": "3.11.0",
-    "must": "0.13.2"
+    "istanbul": "^0.4.4",
+    "jscs": "^3.0.7",
+    "mocha": "^3.0.2",
+    "mock-enb": "^0.3.2",
+    "mock-fs": "^3.11.0",
+    "must": "^0.13.2"
   },
   "scripts": {
     "test": "npm run lint && npm run unit",
