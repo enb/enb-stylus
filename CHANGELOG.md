@@ -1,6 +1,22 @@
 История изменений
 =================
 
+2.4.0
+-----
+
+### Опции
+
+* Добавлена опция [inlineMaxSize](api.ru.md#inlinemaxsize) (@creedencewright [#128]).
+
+### Зависимости
+
+* Модуль `autoprefixer@6.3.4` обновлен до версии `6.4.0`.
+* Модуль `csswring@4.2.2` обновлен до версии `4.2.3`.
+* Модуль `es6-promise@3.1.2` обновлен до версии `3.2.1`.
+* Модуль `nib@1.1.0` обновлен до версии `1.1.2`.
+* Модуль `postcss@5.0.19` обновлен до версии `5.1.2`.
+* Модуль `postcss-url@5.1.1` обновлен до версии `5.1.2`.
+
 2.3.3
 -----
 
@@ -143,3 +159,4 @@
 [#116]: https://github.com/enb/enb-stylus/pull/116
 [#120]: https://github.com/enb/enb-stylus/pull/120
 [#125]: https://github.com/enb/enb-stylus/pull/125
+[#128]: https://github.com/enb/enb-stylus/pull/128
