@@ -59,7 +59,7 @@
     "bower-npm-install": "^0.5.11",
     "deep-extend": "^0.4.1",
     "enb": ">=0.16.0 <2.0.0",
-    "eslint": "^3.2.2",
+    "eslint": "^3.9.0",
     "eslint-config-pedant": "^0.8.0",
     "istanbul": "^0.4.4",
     "jscs": "^3.0.7",
