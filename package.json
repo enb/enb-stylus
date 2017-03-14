@@ -44,7 +44,7 @@
     "enb": ">=0.16.0 <2.0.0"
   },
   "dependencies": {
-    "autoprefixer": "6.5.4",
+    "autoprefixer": "6.7.7",
     "csswring": "4.2.3",
     "es6-promise": "4.0.5",
     "nib": "1.1.2",
