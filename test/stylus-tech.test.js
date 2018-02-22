@@ -212,7 +212,6 @@ describe('stylus-tech', function () {
                 expected = [
                     'body{',
                         'color:#000;',
-                        'display:-webkit-box;',
                         'display:-ms-flexbox;',
                         'display:flex;',
                     '}'
