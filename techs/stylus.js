@@ -35,8 +35,8 @@ var path = require('path'),
  *                                                                    - `inline` – inlines assets using base64 encoding.
  * @param {Boolean}         [options.comments=true]                   Adds CSS comment with path to source to a code
  *                                                                    block (above and below).<br/>
- * @param {String|Boolean}  [options.imports='include']               Allows to include(expand) @import or leave without
- *                                                                    changes.
+ * @param {String|Boolean}  [options.imports='include']               Allows to include(expand) @import with css files
+ *                                                                    or leave without changes.
  * @param {Boolean|String}  [options.sourcemap=false]                 Builds sourcemap:<br/>
  *                                                                    - `true` – builds ?.css.map.<br/>
  *                                                                    - `inline` – builds and inlining sourcemap into
@@ -275,6 +275,7 @@ module.exports = buildFlow.create()
             var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
+                .set('include css', this._imports === 'include')
                 .set('sourcemap', map);
 
             // rebase url() in all cases on stylus level
@@ -345,11 +346,6 @@ module.exports = buildFlow.create()
                     inline: this._sourcemap === 'inline',
                     annotation: true
                 };
-            }
-
-            // expand imports with css
-            if (this._imports === 'include') {
-                processor.use(require('postcss-import')());
             }
 
             // rebase or inline urls in css

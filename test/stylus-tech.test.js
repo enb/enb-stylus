@@ -8,11 +8,7 @@ var fs = require('fs'),
     FileList = require('enb/lib/file-list'),
     loadDirSync = require('mock-enb/utils/dir-utils').loadDirSync,
     StylusTech = require('../techs/stylus'),
-    stylus = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'stylus')),
-    csswring = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'csswring')),
-    postcss = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'postcss')),
-    nib = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'nib')),
-    autoprefixer = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules', 'autoprefixer')),
+    nodeModules = mockFsHelper.duplicateFSInMemory(path.resolve('node_modules')),
     EOL = require('os').EOL;
 
 describe('stylus-tech', function () {
@@ -40,6 +36,36 @@ describe('stylus-tech', function () {
 
             return build(scheme).then(function (actual) {
                 actual.must.equal('body{color:#000;}');
+            });
+        });
+
+        it('css imports can be left as is', function () {
+            var scheme = {
+                blocks: { 'block.styl': '@import "../plugins/file.css"\n' },
+                plugins: { 'file.css': 'body { color: #000; }' }
+            };
+
+            return build(scheme, { imports: 'keep' }).then(function (actual) {
+                actual.must.equal('@import"../plugins/file.css";');
+            });
+        });
+
+        it('css imports correctly processed after styl files', function () {
+            var scheme = {
+                blocks: {
+                    'block.styl': [
+                        '@import "../plugins/file.styl";',
+                        '@import "../plugins/file2.css";'
+                    ].join(EOL)
+                },
+                plugins: {
+                    'file.styl': 'body { margin: 0; }',
+                    'file2.css': 'body { padding: 0; }'
+                }
+            };
+
+            return build(scheme).then(function (actual) {
+                actual.must.equal('body{margin:0;}body{padding:0;}');
             });
         });
     });
@@ -481,13 +507,7 @@ function build (scheme, options) {
             blocks: {},
             bundle: {},
             // jscs:disable
-            node_modules: {
-                stylus: stylus,
-                nib: nib,
-                autoprefixer: autoprefixer,
-                csswring: csswring,
-                postcss: postcss
-            }
+            node_modules: nodeModules
             // jscs:enable
         },
         commonScheme = deepExtend(baseScheme, scheme),
