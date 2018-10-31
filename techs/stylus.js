@@ -371,7 +371,7 @@ module.exports = buildFlow.create()
 
             return postcssPlugins.length || this._sourcemap ?
                 postcss(postcssPlugins).process(css, opts) :
-                { css : css };
+                { css: css };
         },
 
         /**

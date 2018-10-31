@@ -108,7 +108,7 @@ describe('stylus-tech', function () {
             };
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"../blocks/block.jpg\");}');
+                actual.must.equal('body{background-image:url("../blocks/block.jpg");}');
             });
         });
     });
@@ -123,7 +123,7 @@ describe('stylus-tech', function () {
             };
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"../blocks/block.jpg\");}');
+                actual.must.equal('body{background-image:url("../blocks/block.jpg");}');
             });
         });
 
@@ -143,9 +143,9 @@ describe('stylus-tech', function () {
                     }
                 },
                 expected = [
-                    'body{background-image:url(\"data:image/jpeg;base64,YmxvY2sgaW1hZ2U=\");}',
-                    'div{background-image:url(\"data:image/png;base64,YmxvY2sgaW1hZ2U=\");}',
-                    'section{background-image:url(\"data:image/gif;base64,YmxvY2sgaW1hZ2U=\");}'
+                    'body{background-image:url("data:image/jpeg;base64,YmxvY2sgaW1hZ2U=");}',
+                    'div{background-image:url("data:image/png;base64,YmxvY2sgaW1hZ2U=");}',
+                    'section{background-image:url("data:image/gif;base64,YmxvY2sgaW1hZ2U=");}'
                 ].join('');
 
             return build(scheme, { url: 'inline' }).then(function (actual) {
@@ -164,7 +164,7 @@ describe('stylus-tech', function () {
             };
 
             return build(scheme, { url: 'inline' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"data:image/svg+xml,block-image\");}');
+                actual.must.equal('body{background-image:url("data:image/svg+xml,block-image");}');
             });
         });
 
@@ -179,9 +179,9 @@ describe('stylus-tech', function () {
                     }
                 },
                 expected = [
-                    'body{background-image:url(\"http://foo.com/foo.css\");}',
-                    'div{background-image:url(\"https://foo.com/foo.css\");}',
-                    'section{background-image:url(\"//foo.com/foo.css\");}'
+                    'body{background-image:url("http://foo.com/foo.css");}',
+                    'div{background-image:url("https://foo.com/foo.css");}',
+                    'section{background-image:url("//foo.com/foo.css");}'
                 ].join('');
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
