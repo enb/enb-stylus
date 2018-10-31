@@ -1,8 +1,4 @@
-// Support node 0.10: `postcss` uses promises
-require('es6-promise').polyfill();
-
 var path = require('path'),
-    vow = require('vow'),
     enb = require('enb'),
     vfs = enb.asyncFS || require('enb/lib/fs/async-fs'),
     FileList = enb.FileList || require('enb/lib/file-list'),
@@ -118,20 +114,24 @@ module.exports = buildFlow.create()
         return cache.needRebuildFileList('global', this._globalFiles);
     })
     .builder(function (sourceFiles) {
-        var node = this.node,
+        var _this = this,
+            node = this.node,
             filename = node.resolvePath(path.basename(this._target)),
             stylesImports = this._prepareImports(sourceFiles);
 
         return this._processStylus(filename, stylesImports)
-            .spread(function (css, sourcemap) {
-                return this._processCss(filename, css, sourcemap);
-            }, this)
+            .then(function (results) {
+                var css = results[0],
+                    sourcemap = results[1];
+
+                return _this._processCss(filename, css, sourcemap);
+            })
             .then(function (result) {
-                return this._writeMap(filename + '.map', result.map)
+                return _this._writeMap(filename + '.map', result.map)
                     .then(function () {
                         return result.css;
                     });
-            }, this);
+            });
     })
 
     .methods(/** @lends StylusTech.prototype */{
@@ -311,13 +311,13 @@ module.exports = buildFlow.create()
                 renderer.import(importPath);
             });
 
-            var defer = vow.defer();
+            var _this = this;
 
-            this._configureRenderer(renderer).render(function (err, css) {
-                err ? defer.reject(err) : defer.resolve([css, renderer.sourcemap]);
+            return new Promise(function (resolve, reject) {
+                _this._configureRenderer(renderer).render(function (err, css) {
+                    err ? reject(err) : resolve([css, renderer.sourcemap]);
+                });
             });
-
-            return defer.promise();
         },
 
         /**
@@ -330,7 +330,8 @@ module.exports = buildFlow.create()
          * @returns {Promise} – promise with processed css and sourcemap (options)
          */
         _processCss: function (filename, css, sourcemap) {
-            var processor = require('postcss')(),
+            var postcss = require('postcss'),
+                postcssPlugins = [],
                 urlMethod = this._url,
 
                 // base opts to resolve urls
@@ -350,25 +351,27 @@ module.exports = buildFlow.create()
 
             // rebase or inline urls in css
             if (['rebase', 'inline'].indexOf(urlMethod) > -1) {
-                processor.use(require('postcss-url')({ url: urlMethod, maxSize: this._inlineMaxSize }));
+                postcssPlugins.push(require('postcss-url')({ url: urlMethod, maxSize: this._inlineMaxSize }));
             }
 
             // use autoprefixer
             if (this._autoprefixer) {
                 var autoprefixer = require('autoprefixer');
-                processor.use(
-                    (typeof this._autoprefixer === 'object' ?
+                postcssPlugins.push(
+                    typeof this._autoprefixer === 'object' ?
                         autoprefixer(this._autoprefixer) :
-                        autoprefixer)
+                        autoprefixer
                 );
             }
 
             // compress css
             if (this._compress) {
-                processor.use(require('csswring')());
+                postcssPlugins.push(require('csswring')());
             }
 
-            return processor.process(css, opts);
+            return postcssPlugins.length || this._sourcemap ?
+                postcss(postcssPlugins).process(css, opts) :
+                { css : css };
         },
 
         /**
@@ -384,7 +387,7 @@ module.exports = buildFlow.create()
                 return vfs.write(filename, JSON.stringify(data));
             }
 
-            return vow.resolve();
+            return Promise.resolve();
         }
     })
     .createTech();

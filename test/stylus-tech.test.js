@@ -1,7 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
     deepExtend = require('deep-extend'),
-    vow = require('vow'),
     mockFs = require('mock-fs'),
     mockFsHelper = require(path.join(__dirname, 'lib', 'mock-fs-helper')),
     MockNode = require('mock-enb/lib/mock-node'),
@@ -158,14 +157,14 @@ describe('stylus-tech', function () {
             var scheme = {
                 blocks: {
                     images: {
-                        'block.svg': new Buffer('block image')
+                        'block.svg': new Buffer('block-image')
                     },
                     'block.styl': 'body { background-image: url(images/block.svg) }'
                 }
             };
 
             return build(scheme, { url: 'inline' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"data:image/svg+xml;charset=US-ASCII,block%20image\");}');
+                actual.must.equal('body{background-image:url(\"data:image/svg+xml,block-image\");}');
             });
         });
 
@@ -230,6 +229,7 @@ describe('stylus-tech', function () {
                         'block.styl': [
                             'body {          ',
                             '  color: #000;  ',
+                            '  display:-ms-flexbox;',
                             '  display: flex;',
                             '}               '
                         ].join(EOL)
@@ -238,7 +238,6 @@ describe('stylus-tech', function () {
                 expected = [
                     'body{',
                         'color:#000;',
-                        'display:-ms-flexbox;',
                         'display:flex;',
                     '}'
                 ].join('');
@@ -353,7 +352,7 @@ describe('stylus-tech', function () {
                     }
                 };
 
-            return vow.all([
+            return Promise.all([
                 build(scheme, { use: nibPlugin() }),
                 build(scheme, { use: [nibPlugin()] })
             ]).then(function (values) {
