@@ -114,24 +114,17 @@ module.exports = buildFlow.create()
         return cache.needRebuildFileList('global', this._globalFiles);
     })
     .builder(function (sourceFiles) {
-        var _this = this,
-            node = this.node,
+        var node = this.node,
             filename = node.resolvePath(path.basename(this._target)),
             stylesImports = this._prepareImports(sourceFiles);
 
         return this._processStylus(filename, stylesImports)
-            .then(function (results) {
-                var css = results[0],
-                    sourcemap = results[1];
-
-                return _this._processCss(filename, css, sourcemap);
-            })
-            .then(function (result) {
-                return _this._writeMap(filename + '.map', result.map)
-                    .then(function () {
-                        return result.css;
-                    });
-            });
+            .then(([css, sourcemap]) =>
+                this._processCss(filename, css, sourcemap)
+            )
+            .then(result =>
+                this._writeMap(filename + '.map', result.map).then(() => result.css)
+            );
     })
 
     .methods(/** @lends StylusTech.prototype */{
@@ -311,10 +304,8 @@ module.exports = buildFlow.create()
                 renderer.import(importPath);
             });
 
-            var _this = this;
-
-            return new Promise(function (resolve, reject) {
-                _this._configureRenderer(renderer).render(function (err, css) {
+            return new Promise((resolve, reject) => {
+                this._configureRenderer(renderer).render(function (err, css) {
                     err ? reject(err) : resolve([css, renderer.sourcemap]);
                 });
             });
