@@ -67,6 +67,21 @@ describe('stylus-tech', function () {
                 actual.must.equal('body{margin:0;}body{padding:0;}');
             });
         });
+
+        it('must import css without processing and resolve urls', function () {
+            var scheme = {
+                blocks: {
+                    'block.styl': '@import "../plugins/file2.css";'
+                },
+                plugins: {
+                    'file2.css': '.transparent { background: url(./icon.png); filter: alpha(opacity=0); }'
+                }
+            };
+
+            return build(scheme).then(function (actual) {
+                actual.must.equal('.transparent{background:url(../plugins/icon.png);filter:alpha(opacity=0);}');
+            });
+        });
     });
 
     describe('@require', function () {

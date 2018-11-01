@@ -268,7 +268,6 @@ module.exports = buildFlow.create()
             var renderer = stylus(stylesImports)
                 .set('prefix', this._prefix)
                 .set('filename', filename)
-                .set('include css', this._imports === 'include')
                 .set('sourcemap', map);
 
             // rebase url() in all cases on stylus level
@@ -338,6 +337,11 @@ module.exports = buildFlow.create()
                     inline: this._sourcemap === 'inline',
                     annotation: true
                 };
+            }
+
+            // expand imports with css
+            if (this._imports === 'include') {
+                postcssPlugins.push(require('postcss-import')());
             }
 
             // rebase or inline urls in css
