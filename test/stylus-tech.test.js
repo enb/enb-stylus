@@ -1,7 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
     deepExtend = require('deep-extend'),
-    vow = require('vow'),
     mockFs = require('mock-fs'),
     mockFsHelper = require(path.join(__dirname, 'lib', 'mock-fs-helper')),
     MockNode = require('mock-enb/lib/mock-node'),
@@ -68,6 +67,21 @@ describe('stylus-tech', function () {
                 actual.must.equal('body{margin:0;}body{padding:0;}');
             });
         });
+
+        it('must import css without processing and resolve urls', function () {
+            var scheme = {
+                blocks: {
+                    'block.styl': '@import "../plugins/file2.css";'
+                },
+                plugins: {
+                    'file2.css': '.transparent { background: url(./icon.png); filter: alpha(opacity=0); }'
+                }
+            };
+
+            return build(scheme).then(function (actual) {
+                actual.must.equal('.transparent{background:url(../plugins/icon.png);filter:alpha(opacity=0);}');
+            });
+        });
     });
 
     describe('@require', function () {
@@ -109,7 +123,7 @@ describe('stylus-tech', function () {
             };
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"../blocks/block.jpg\");}');
+                actual.must.equal('body{background-image:url("../blocks/block.jpg");}');
             });
         });
     });
@@ -124,7 +138,7 @@ describe('stylus-tech', function () {
             };
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"../blocks/block.jpg\");}');
+                actual.must.equal('body{background-image:url("../blocks/block.jpg");}');
             });
         });
 
@@ -144,9 +158,9 @@ describe('stylus-tech', function () {
                     }
                 },
                 expected = [
-                    'body{background-image:url(\"data:image/jpeg;base64,YmxvY2sgaW1hZ2U=\");}',
-                    'div{background-image:url(\"data:image/png;base64,YmxvY2sgaW1hZ2U=\");}',
-                    'section{background-image:url(\"data:image/gif;base64,YmxvY2sgaW1hZ2U=\");}'
+                    'body{background-image:url("data:image/jpeg;base64,YmxvY2sgaW1hZ2U=");}',
+                    'div{background-image:url("data:image/png;base64,YmxvY2sgaW1hZ2U=");}',
+                    'section{background-image:url("data:image/gif;base64,YmxvY2sgaW1hZ2U=");}'
                 ].join('');
 
             return build(scheme, { url: 'inline' }).then(function (actual) {
@@ -158,14 +172,14 @@ describe('stylus-tech', function () {
             var scheme = {
                 blocks: {
                     images: {
-                        'block.svg': new Buffer('block image')
+                        'block.svg': new Buffer('block-image')
                     },
                     'block.styl': 'body { background-image: url(images/block.svg) }'
                 }
             };
 
             return build(scheme, { url: 'inline' }).then(function (actual) {
-                actual.must.equal('body{background-image:url(\"data:image/svg+xml;charset=US-ASCII,block%20image\");}');
+                actual.must.equal('body{background-image:url("data:image/svg+xml,block-image");}');
             });
         });
 
@@ -180,9 +194,9 @@ describe('stylus-tech', function () {
                     }
                 },
                 expected = [
-                    'body{background-image:url(\"http://foo.com/foo.css\");}',
-                    'div{background-image:url(\"https://foo.com/foo.css\");}',
-                    'section{background-image:url(\"//foo.com/foo.css\");}'
+                    'body{background-image:url("http://foo.com/foo.css");}',
+                    'div{background-image:url("https://foo.com/foo.css");}',
+                    'section{background-image:url("//foo.com/foo.css");}'
                 ].join('');
 
             return build(scheme, { url: 'rebase' }).then(function (actual) {
@@ -230,6 +244,7 @@ describe('stylus-tech', function () {
                         'block.styl': [
                             'body {          ',
                             '  color: #000;  ',
+                            '  display:-ms-flexbox;',
                             '  display: flex;',
                             '}               '
                         ].join(EOL)
@@ -238,7 +253,6 @@ describe('stylus-tech', function () {
                 expected = [
                     'body{',
                         'color:#000;',
-                        'display:-ms-flexbox;',
                         'display:flex;',
                     '}'
                 ].join('');
@@ -353,7 +367,7 @@ describe('stylus-tech', function () {
                     }
                 };
 
-            return vow.all([
+            return Promise.all([
                 build(scheme, { use: nibPlugin() }),
                 build(scheme, { use: [nibPlugin()] })
             ]).then(function (values) {
