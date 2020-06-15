@@ -286,6 +286,32 @@ describe('stylus-tech', function () {
                     actual.must.equal(expected);
                 });
         });
+
+        it('must do not delete -webkit-box-orient for multiline overflow', function () {
+            var scheme = {
+                    blocks: {
+                        'block.styl': [
+                            'body {                         ',
+                            '  -webkit-line-clamp: 2;       ',
+                            '  display: -webkit-box;        ' +
+                            '  -webkit-box-orient: vertical;',
+                            '}                              '
+                        ].join(EOL)
+                    }
+                },
+                expected = [
+                    'body{',
+                        '-webkit-line-clamp:2;',
+                        'display:-webkit-box;',
+                        '-webkit-box-orient:vertical;',
+                    '}'
+                ].join('');
+
+            return build(scheme, { autoprefixer: { browsers: ['Chrome > 80'] } })
+                .then(function (actual) {
+                    actual.must.equal(expected);
+                });
+        });
     });
 
     describe('sourcemap', function () {
